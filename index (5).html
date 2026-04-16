@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skinny To Fit | Transform Your Body</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --fire: #ff4500;
+  --gold: #ffd700;
+  --neon: #00ff88;
+  --dark: #080810;
+  --card: #0f0f1a;
+  --card2: #141428;
+  --border: rgba(255,69,0,0.3);
+  --text: #e8e8f0;
+  --muted: #888899;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── PRELOADER ── */
+#preloader {
+  position: fixed; inset: 0;
+  background: var(--dark);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#preloader.hide { opacity:0; visibility:hidden; }
+
+.pre-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem,8vw,5rem);
+  background: linear-gradient(135deg, var(--fire), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: pulse 1.2s ease-in-out infinite;
+  letter-spacing: 4px;
+}
+.pre-sub {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem; letter-spacing: 6px;
+  color: var(--muted); margin-top: 8px;
+  animation: fadeUp 0.8s ease both;
+}
+.pre-bar-wrap {
+  width: 240px; height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 99px; margin-top: 40px; overflow: hidden;
+}
+.pre-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--fire), var(--gold));
+  border-radius: 99px;
+  width: 0;
+  animation: load 2.2s cubic-bezier(.4,0,.2,1) forwards;
+}
+.pre-pct {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem; color: var(--gold);
+  margin-top: 10px; letter-spacing: 2px;
+}
+
+@keyframes load { to { width:100%; } }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.8;transform:scale(0.97)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,69,0,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(255,215,0,0.1) 0%, transparent 70%),
+    var(--dark);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,69,0,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,69,0,0.07) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove { from{transform:translateY(0)} to{transform:translateY(60px)} }
+
+.hero-content { position:relative; z-index:1; }
+
+.hero-badge {
+  display: inline-block;
+  border: 1px solid var(--fire);
+  color: var(--fire);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem; letter-spacing: 4px;
+  padding: 6px 18px; border-radius: 99px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s ease both;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.5rem, 12vw, 9rem);
+  line-height: 0.95;
+  background: linear-gradient(135deg, #fff 0%, var(--gold) 50%, var(--fire) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: fadeUp 0.7s 0.1s ease both;
+  letter-spacing: 2px;
+}
+
+.hero-sub {
+  font-size: 1.15rem; color: var(--muted);
+  margin-top: 16px; letter-spacing: 2px;
+  animation: fadeUp 0.7s 0.2s ease both;
+}
+
+.hero-cta {
+  margin-top: 40px;
+  display: inline-block;
+  padding: 16px 48px;
+  background: linear-gradient(135deg, var(--fire), #ff6a00);
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem; letter-spacing: 3px;
+  border: none; border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  animation: fadeUp 0.7s 0.3s ease both;
+  position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 40px rgba(255,69,0,0.4);
+}
+.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(255,69,0,0.6); }
+.hero-cta::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity:0; transition: opacity 0.3s;
+}
+.hero-cta:hover::after { opacity:1; }
+
+.hero-stats {
+  display: flex; gap: 48px;
+  margin-top: 60px; justify-content: center;
+  animation: fadeUp 0.7s 0.4s ease both;
+}
+.stat { text-align: center; }
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem; color: var(--gold);
+  line-height: 1;
+}
+.stat-lbl { font-size: 0.75rem; color: var(--muted); letter-spacing: 2px; }
+
+/* ── MAIN CONTAINER ── */
+#app {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* ── SECTION CARD ── */
+.section-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(24px, 5vw, 48px);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.section-card.visible { opacity:1; transform:translateY(0); }
+
+.section-card::before {
+  content:''; position:absolute;
+  top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, var(--fire), var(--gold), transparent);
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: 3px;
+  margin-bottom: 6px;
+}
+.section-title span { color: var(--fire); }
+
+.section-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 32px; }
+
+/* ── INPUTS ── */
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+
+.field label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem; letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.field input, .field select {
+  background: var(--card2);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.05rem; font-weight: 600;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  width: 100%;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--fire);
+  box-shadow: 0 0 0 3px rgba(255,69,0,0.15);
+}
+.field select option { background: #1a1a2e; }
+
+/* ── BMI DISPLAY ── */
+.bmi-display {
+  background: var(--card2);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.07);
+  margin-top: 24px;
+  display: none;
+}
+.bmi-display.show { display: block; animation: fadeUp 0.5s ease both; }
+
+.bmi-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem; line-height: 1;
+  background: linear-gradient(135deg, var(--fire), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.bmi-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem; letter-spacing: 3px;
+  margin-top: 6px;
+}
+
+.bmi-bar-track {
+  width: 100%; height: 10px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  margin: 20px auto;
+  position: relative; overflow: hidden;
+}
+.bmi-bar-fill {
+  height: 100%; border-radius: 99px;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1), background 0.5s;
+}
+
+.bmi-suggestion {
+  font-size: 1rem; color: var(--text);
+  margin-top: 12px; line-height: 1.7;
+}
+
+/* ── GOAL PILLS ── */
+.goal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.goal-pill {
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  background: var(--card2);
+  position: relative; overflow: hidden;
+}
+.goal-pill::before {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, var(--fire), var(--gold));
+  opacity:0; transition: opacity 0.3s;
+}
+.goal-pill:hover { border-color: var(--fire); transform: translateY(-2px); }
+.goal-pill.active { border-color: var(--fire); box-shadow: 0 0 24px rgba(255,69,0,0.3); }
+.goal-pill.active::before { opacity: 0.08; }
+
+.goal-icon { font-size: 2rem; display: block; margin-bottom: 8px; position:relative; z-index:1; }
+.goal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem; letter-spacing: 2px;
+  position:relative; z-index:1;
+}
+.goal-sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; position:relative; z-index:1; }
+
+/* ── BUDGET ── */
+.budget-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.budget-btn {
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 14px 10px;
+  cursor: pointer;
+  text-align: center;
+  background: var(--card2);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem; font-weight: 600;
+  color: var(--text);
+  transition: all 0.3s;
+}
+.budget-btn:hover { border-color: var(--gold); }
+.budget-btn.active { border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); color: var(--gold); }
+
+.custom-budget-wrap {
+  display: none; margin-top: 12px;
+}
+.custom-budget-wrap.show { display: block; animation: fadeUp 0.4s ease both; }
+
+/* ── GENERATE BTN ── */
+.generate-btn {
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(135deg, var(--fire) 0%, #ff6a00 50%, var(--gold) 100%);
+  border: none; border-radius: 12px;
+  color: #fff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem; letter-spacing: 5px;
+  cursor: pointer;
+  position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 40px rgba(255,69,0,0.4);
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+}
+.generate-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 60px rgba(255,69,0,0.6); }
+.generate-btn:active { transform: translateY(0); }
+.generate-btn::after {
+  content:''; position:absolute;
+  top:-50%; left:-60%; width:40%; height:200%;
+  background: rgba(255,255,255,0.15);
+  transform: skewX(-20deg);
+  animation: shine 3s infinite;
+}
+@keyframes shine { 0%{left:-60%} 100%{left:160%} }
+
+/* ── LOADING ── */
+.loading-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(8,8,16,0.95);
+  z-index: 1000;
+  flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 20px;
+}
+.loading-overlay.show { display: flex; }
+
+.loading-spinner {
+  width: 64px; height: 64px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: var(--fire);
+  border-right-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem; letter-spacing: 4px;
+  color: var(--gold);
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ── RESULT ── */
+#result-section {
+  display: none;
+  margin-top: 32px;
+}
+#result-section.show { display: block; }
+
+.result-tabs {
+  display: flex; gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 10px 24px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 99px;
+  background: var(--card2);
+  color: var(--muted);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 1px;
+}
+.tab-btn:hover { border-color: var(--fire); color: var(--text); }
+.tab-btn.active { border-color: var(--fire); background: rgba(255,69,0,0.12); color: var(--fire); }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeUp 0.4s ease both; }
+
+/* ── PLAN CONTENT ── */
+.plan-content {
+  background: var(--card2);
+  border-radius: 12px;
+  padding: clamp(20px, 4vw, 36px);
+  border: 1px solid rgba(255,255,255,0.07);
+  line-height: 1.9;
+  font-size: 1rem;
+  white-space: pre-wrap;
+}
+
+.plan-content h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem; letter-spacing: 3px;
+  color: var(--gold); margin: 24px 0 12px;
+}
+.plan-content h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem; letter-spacing: 2px;
+  color: var(--fire); margin: 18px 0 8px;
+}
+.plan-content ul { padding-left: 20px; }
+.plan-content li { margin: 6px 0; }
+.plan-content strong { color: var(--gold); }
+.plan-content em { color: var(--neon); font-style: normal; font-weight: 600; }
+
+/* ── POPUP ── */
+.popup-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(8,8,16,0.92);
+  z-index: 2000;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.popup-overlay.show { display: flex; }
+
+.popup-box {
+  background: var(--card);
+  border: 1px solid var(--fire);
+  border-radius: 20px;
+  padding: 48px 36px;
+  text-align: center;
+  max-width: 420px; width: 100%;
+  animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  position: relative;
+}
+@keyframes popIn {
+  from { opacity:0; transform:scale(0.7) translateY(30px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+
+.popup-emoji {
+  font-size: 4.5rem;
+  display: block;
+  animation: thumbShake 0.6s 0.3s ease both;
+}
+@keyframes thumbShake {
+  0%{transform:rotate(-15deg) scale(0.5)} 40%{transform:rotate(10deg) scale(1.2)}
+  70%{transform:rotate(-5deg) scale(0.95)} 100%{transform:rotate(0) scale(1)}
+}
+
+.popup-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem; letter-spacing: 3px;
+  color: var(--fire); margin: 16px 0 10px;
+}
+
+.popup-msg {
+  font-size: 1.05rem;
+  color: var(--text);
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+
+.popup-close {
+  padding: 14px 36px;
+  background: linear-gradient(135deg, var(--fire), #ff6a00);
+  border: none; border-radius: 8px;
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem; letter-spacing: 2px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.popup-close:hover { transform: scale(1.05); }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+footer span { color: var(--fire); }
+
+/* ── SCROLL INDICATOR ── */
+.scroll-down {
+  position: absolute; bottom: 40px;
+  left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; color: var(--muted);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem; letter-spacing: 3px;
+  animation: bounce 2s ease-in-out infinite;
+}
+.scroll-down svg { color: var(--fire); }
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .hero-stats { gap: 24px; }
+  .stat-num { font-size: 1.8rem; }
+  .budget-options { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-logo">SKINNY TO FIT</div>
+  <div class="pre-sub">TRANSFORM YOUR BODY</div>
+  <div class="pre-bar-wrap"><div class="pre-bar"></div></div>
+  <div class="pre-pct" id="prePercent">0%</div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="budgetPopup">
+  <div class="popup-box">
+    <span class="popup-emoji">👎</span>
+    <div class="popup-title">Bhai Seriously?!</div>
+    <div class="popup-msg">
+      ₹1000 se kam mein body banana chahta hai? 😂<br><br>
+      <strong>Bhai teri body nahi banegi!</strong><br>
+      Tu mutthi maar aur ghar baith! 🤣<br><br>
+      Kam se kam ₹1000+ toh laga bhai, apne aap pe thoda invest kar!
+    </div>
+    <button class="popup-close" onclick="closePopup()">THEEK HAI BHAI 😅</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">GENERATING YOUR PLAN...</div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 AI POWERED FITNESS PLANNER</div>
+    <h1 class="hero-title">SKINNY<br>TO FIT</h1>
+    <p class="hero-sub">Apna body transform kar — Diet + Workout + Budget sab ek jagah</p>
+    <button class="hero-cta" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})">
+      SHURU KAREN ⚡
+    </button>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">10K+</div><div class="stat-lbl">Users</div></div>
+      <div class="stat"><div class="stat-num">95%</div><div class="stat-lbl">Results</div></div>
+      <div class="stat"><div class="stat-num">AI</div><div class="stat-lbl">Powered</div></div>
+    </div>
+  </div>
+  <div class="scroll-down">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10l5 5 5-5"/></svg>
+    SCROLL
+  </div>
+</section>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- STEP 1: Details -->
+  <div class="section-card" id="step1">
+    <div class="section-title">STEP 1 — <span>APNI DETAILS</span></div>
+    <div class="section-desc">Apni sahi information daal taki accurate plan mile</div>
+    <div class="input-grid">
+      <div class="field">
+        <label>Umar (Years)</label>
+        <input type="number" id="age" placeholder="e.g. 22" min="10" max="80">
+      </div>
+      <div class="field">
+        <label>Gender</label>
+        <select id="gender">
+          <option value="">Select...</option>
+          <option value="male">Male 👦</option>
+          <option value="female">Female 👧</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Height (cm)</label>
+        <input type="number" id="height" placeholder="e.g. 175" min="100" max="250">
+      </div>
+      <div class="field">
+        <label>Weight (kg)</label>
+        <input type="number" id="weight" placeholder="e.g. 65" min="30" max="300">
+      </div>
+      <div class="field">
+        <label>Activity Level</label>
+        <select id="activity">
+          <option value="">Select...</option>
+          <option value="sedentary">Sedentary (Ghar pe baitha)</option>
+          <option value="light">Light (Thodi walk)</option>
+          <option value="moderate">Moderate (Week mein 3-4 din exercise)</option>
+          <option value="active">Active (Roz exercise)</option>
+          <option value="veryactive">Very Active (Athlete level)</option>
+        </select>
+      </div>
+    </div>
+    <div class="bmi-display" id="bmiDisplay">
+      <div class="bmi-number" id="bmiVal">—</div>
+      <div class="bmi-label" id="bmiCat">BMI INDEX</div>
+      <div class="bmi-bar-track"><div class="bmi-bar-fill" id="bmiBar"></div></div>
+      <div class="bmi-suggestion" id="bmiSugg"></div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Goal -->
+  <div class="section-card" id="step2">
+    <div class="section-title">STEP 2 — <span>APNA GOAL</span></div>
+    <div class="section-desc">Kya achieve karna chahte ho?</div>
+    <div class="goal-grid">
+      <div class="goal-pill" onclick="selectGoal(this,'muscle_gain')">
+        <span class="goal-icon">💪</span>
+        <div class="goal-title">Muscle Gain</div>
+        <div class="goal-sub">Body banao, mass badao</div>
+      </div>
+      <div class="goal-pill" onclick="selectGoal(this,'fat_loss')">
+        <span class="goal-icon">🔥</span>
+        <div class="goal-title">Fat Loss</div>
+        <div class="goal-sub">Pet kam karo, slim bano</div>
+      </div>
+      <div class="goal-pill" onclick="selectGoal(this,'maintain')">
+        <span class="goal-icon">⚖️</span>
+        <div class="goal-title">Maintain</div>
+        <div class="goal-sub">Current body maintain karo</div>
+      </div>
+      <div class="goal-pill" onclick="selectGoal(this,'body_recomp')">
+        <span class="goal-icon">🏆</span>
+        <div class="goal-title">Body Recomp</div>
+        <div class="goal-sub">Fat lose + Muscle gain saath</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Budget -->
+  <div class="section-card" id="step3">
+    <div class="section-title">STEP 3 — <span>MONTHLY BUDGET</span></div>
+    <div class="section-desc">Khane pe mahine mein kitna kharch kar sakte ho?</div>
+    <div class="budget-options">
+      <div class="budget-btn" onclick="selectBudget(this,'1000-2000','₹1K–2K')">₹1,000–2,000</div>
+      <div class="budget-btn" onclick="selectBudget(this,'2000-4000','₹2K–4K')">₹2,000–4,000</div>
+      <div class="budget-btn" onclick="selectBudget(this,'4000-7000','₹4K–7K')">₹4,000–7,000</div>
+      <div class="budget-btn" onclick="selectBudget(this,'7000-12000','₹7K–12K')">₹7,000–12,000</div>
+      <div class="budget-btn" onclick="selectBudget(this,'12000+','₹12K+')">₹12,000+</div>
+      <div class="budget-btn" onclick="openCustomBudget(this)">Custom Amount ✏️</div>
+    </div>
+    <div class="custom-budget-wrap" id="customWrap">
+      <div class="field">
+        <label>Custom Budget (₹ per month)</label>
+        <input type="number" id="customBudget" placeholder="e.g. 3500" min="1" oninput="checkCustomBudget()">
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERATE -->
+  <div class="section-card" id="genSection">
+    <button class="generate-btn" onclick="generatePlan()">
+      ⚡ GENERATE MY PLAN ⚡
+    </button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result-section">
+    <div class="section-card visible" style="opacity:1;transform:none">
+      <div class="section-title">YOUR <span>COMPLETE PLAN</span></div>
+      <div class="result-tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'dietTab')">🥗 Diet Plan</button>
+        <button class="tab-btn" onclick="switchTab(this,'workoutTab')">💪 Workout Plan</button>
+        <button class="tab-btn" onclick="switchTab(this,'tipsTab')">💡 Pro Tips</button>
+      </div>
+      <div class="tab-content active" id="dietTab">
+        <div class="plan-content" id="dietContent">Loading...</div>
+      </div>
+      <div class="tab-content" id="workoutTab">
+        <div class="plan-content" id="workoutContent">Loading...</div>
+      </div>
+      <div class="tab-content" id="tipsTab">
+        <div class="plan-content" id="tipsContent">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  Made with ❤️ by <span>Skinny To Fit</span> | Body toh aaise hi banegi bhai 🔥
+</footer>
+
+<script>
+/* ─── PRELOADER ─── */
+let pct = 0;
+const pctEl = document.getElementById('prePercent');
+const timer = setInterval(()=>{
+  pct = Math.min(pct + Math.random()*18, 100);
+  pctEl.textContent = Math.floor(pct) + '%';
+  if(pct>=100){ clearInterval(timer); setTimeout(hidePreloader, 300); }
+},120);
+
+function hidePreloader(){
+  document.getElementById('preloader').classList.add('hide');
+  initScrollAnimation();
+}
+
+/* ─── SCROLL ANIMATION ─── */
+function initScrollAnimation(){
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  },{threshold:0.12});
+  document.querySelectorAll('.section-card').forEach(c=>observer.observe(c));
+}
+
+/* ─── BMI CALCULATOR ─── */
+function calcBMI(){
+  const h = parseFloat(document.getElementById('height').value);
+  const w = parseFloat(document.getElementById('weight').value);
+  if(!h||!w||h<100||w<20) return;
+
+  const bmi = (w/((h/100)**2)).toFixed(1);
+  const display = document.getElementById('bmiDisplay');
+  display.classList.add('show');
+  document.getElementById('bmiVal').textContent = bmi;
+
+  let cat, color, sugg, pct;
+  if(bmi<16){
+    cat='Severe Underweight 😰'; color='#4af'; pct=5;
+    sugg='Bhai tujhe urgent help chahiye! Tu bahut hi zyada patla hai. Doctor se mil aur khub khana kha.';
+  } else if(bmi<18.5){
+    cat='Underweight 😅'; color='#4af'; pct=18;
+    sugg='Tu thoda patla hai bhai. Muscle gain goal choose kar aur proper diet follow kar. Body banegi!';
+  } else if(bmi<25){
+    cat='Normal Weight ✅'; color='#00ff88'; pct=50;
+    sugg='Teri BMI perfect hai bhai! Ab goal ke hisab se body ko next level le ja.';
+  } else if(bmi<30){
+    cat='Overweight ⚠️'; color='#ffaa00'; pct=72;
+    sugg='Thoda extra fat hai bhai. Fat loss goal choose kar. Diet + workout se 2-3 mahine mein results dikhenge!';
+  } else {
+    cat='Obese 🚨'; color='#ff4500'; pct=90;
+    sugg='Bhai serious ho ja! Obesity health ke liye dangerous hai. Aaj se hi shuru kar — diet + exercise must hai.';
+  }
+
+  document.getElementById('bmiCat').textContent = cat;
+  document.getElementById('bmiCat').style.color = color;
+  document.getElementById('bmiSugg').textContent = sugg;
+  const bar = document.getElementById('bmiBar');
+  setTimeout(()=>{ bar.style.width = pct+'%'; bar.style.background = color; }, 100);
+}
+
+['height','weight'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', calcBMI);
+});
+
+/* ─── GOAL ─── */
+let selectedGoal = '';
+function selectGoal(el, goal){
+  document.querySelectorAll('.goal-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  selectedGoal = goal;
+}
+
+/* ─── BUDGET ─── */
+let selectedBudget = '';
+let selectedBudgetLabel = '';
+function selectBudget(el, val, label){
+  document.querySelectorAll('.budget-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  selectedBudget = val;
+  selectedBudgetLabel = label;
+  document.getElementById('customWrap').classList.remove('show');
+}
+function openCustomBudget(el){
+  document.querySelectorAll('.budget-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('customWrap').classList.add('show');
+  selectedBudget = 'custom';
+}
+function checkCustomBudget(){
+  const val = parseFloat(document.getElementById('customBudget').value);
+  if(val && val < 1000){ showPopup(); document.getElementById('customBudget').value=''; }
+  else if(val){ selectedBudget = val+'-custom'; selectedBudgetLabel = '₹'+val; }
+}
+
+/* ─── POPUP ─── */
+function showPopup(){ document.getElementById('budgetPopup').classList.add('show'); }
+function closePopup(){ document.getElementById('budgetPopup').classList.remove('show'); }
+
+/* ─── TABS ─── */
+function switchTab(btn, tabId){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+/* ─── GENERATE ─── */
+async function generatePlan(){
+  const age = document.getElementById('age').value;
+  const gender = document.getElementById('gender').value;
+  const height = document.getElementById('height').value;
+  const weight = document.getElementById('weight').value;
+  const activity = document.getElementById('activity').value;
+  const goal = selectedGoal;
+  const budget = selectedBudget;
+
+  if(!age||!gender||!height||!weight||!activity){
+    alert('Bhai pehle apni saari details fill kar! 😅'); return;
+  }
+  if(!goal){ alert('Apna goal select kar pehle! 💪'); return; }
+  if(!budget){ alert('Budget select karna padega bhai! 💰'); return; }
+
+  if(budget==='custom'){
+    const cv = parseFloat(document.getElementById('customBudget').value);
+    if(!cv||cv<1000){ showPopup(); return; }
+  }
+
+  const bmi = (parseFloat(weight)/((parseFloat(height)/100)**2)).toFixed(1);
+  const goalMap = {muscle_gain:'Muscle Gain',fat_loss:'Fat Loss',maintain:'Maintain',body_recomp:'Body Recomposition'};
+  const actMap = {sedentary:'Sedentary',light:'Lightly Active',moderate:'Moderately Active',active:'Very Active',veryactive:'Extremely Active (Athlete)'};
+
+  const budgetLabel = budget==='custom' ? '₹'+document.getElementById('customBudget').value : selectedBudgetLabel;
+
+  document.getElementById('loadingOverlay').classList.add('show');
+
+  const dietPrompt = `You are an expert Indian fitness nutritionist. Create a detailed diet plan in Hindi-English mix (Hinglish) for:
+- Age: ${age} years, Gender: ${gender}
+- Height: ${height}cm, Weight: ${weight}kg, BMI: ${bmi}
+- Activity Level: ${actMap[activity]}
+- Goal: ${goalMap[goal]}
+- Monthly food budget: ${budgetLabel}
+
+Format your response with HTML tags. Use:
+<h2> for main sections
+<h3> for sub-sections
+<strong> for important values (calories, macros)
+<em> for food items
+<ul><li> for lists
+
+Include:
+1. Daily Calorie Target with calculation
+2. Macros breakdown (Protein/Carbs/Fat in grams)
+3. Full Day Meal Plan - Breakfast, Mid-morning snack, Lunch, Evening snack, Dinner, Post-workout (with exact quantities and timing)
+4. Best Indian foods for this budget and goal
+5. Weekly grocery list with approximate costs in Indian Rupees
+6. Foods to AVOID
+
+Keep it practical and budget-friendly for India. Be specific with Indian foods like dal, roti, rice, paneer, eggs, chicken etc.`;
+
+  const workoutPrompt = `You are an expert fitness trainer. Create a detailed weekly workout plan in Hinglish for:
+- Age: ${age} years, Gender: ${gender}
+- BMI: ${bmi}, Activity Level: ${actMap[activity]}
+- Goal: ${goalMap[goal]}
+
+Format with HTML: <h2> for sections, <h3> for days, <strong> for sets/reps, <em> for exercise names, <ul><li> for lists.
+
+Include:
+1. Weekly Training Split (which body parts on which days)
+2. Full 7-day workout schedule:
+   - Exercise name, Sets x Reps, Rest time, Tips
+3. Warm-up routine (5-10 min)
+4. Cool-down stretches
+5. Progressive overload tips
+6. Home workout alternatives if no gym
+7. Recovery & sleep tips
+
+Be specific and motivating!`;
+
+  const tipsPrompt = `Give practical fitness and lifestyle tips in Hinglish for a ${age} year old ${gender} with BMI ${bmi} and goal of ${goalMap[goal]} on a budget of ${budgetLabel}/month.
+
+Format with HTML. Include:
+<h2> for sections, <strong> for key points, <ul><li> for tips.
+
+Cover:
+1. Top 5 Supplements (budget-friendly, Indian market) with approximate prices
+2. Best timing for workouts
+3. Sleep and recovery importance
+4. Motivation tips to stay consistent
+5. Common mistakes to avoid
+6. Hydration guide
+7. Realistic timeline: When to expect results
+
+Be real, direct and motivating like a desi fitness coach!`;
+
+  try {
+    const [dietRes, workoutRes, tipsRes] = await Promise.all([
+      callClaude(dietPrompt),
+      callClaude(workoutPrompt),
+      callClaude(tipsPrompt)
+    ]);
+
+    document.getElementById('dietContent').innerHTML = dietRes;
+    document.getElementById('workoutContent').innerHTML = workoutRes;
+    document.getElementById('tipsContent').innerHTML = tipsRes;
+
+    document.getElementById('loadingOverlay').classList.remove('show');
+    const result = document.getElementById('result-section');
+    result.classList.add('show');
+    setTimeout(()=>result.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+
+  } catch(e) {
+    document.getElementById('loadingOverlay').classList.remove('show');
+    alert('Error aa gaya bhai! Dobara try kar. 😅\n'+e.message);
+  }
+}
+
+async function callClaude(prompt){
+  const res = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  if(!res.ok) throw new Error('API error: '+res.status);
+  const data = await res.json();
+  return data.content.map(b=>b.text||'').join('');
+}
+</script>
+</body>
+</html>
