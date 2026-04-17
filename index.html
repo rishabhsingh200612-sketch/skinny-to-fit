@@ -1,971 +1,868 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Skinny To Fit | Transform Your Body</title>
+<title>Skinny to Fit — AI Fitness Planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --fire: #ff4500;
-  --gold: #ffd700;
-  --neon: #00ff88;
-  --dark: #080810;
-  --card: #0f0f1a;
-  --card2: #141428;
-  --border: rgba(255,69,0,0.3);
-  --text: #e8e8f0;
-  --muted: #888899;
-}
+:root{--bg:#06080b;--bg2:#0b0f16;--bg3:#0f1620;--card:#0d1520;--card2:#111e2c;--border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.14);--text:#deeaf8;--muted:#4f6878;--dim:#22333f;--cyan:#00e5ff;--orange:#ff6b35;--green:#39ff14;--gold:#ffd700;--red:#ff3366;--purple:#b94fff;--fd:'Bebas Neue',cursive;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);overflow-x:hidden;min-height:100vh}
 
-* { margin:0; padding:0; box-sizing:border-box; }
+/* ===== ANIMATED GYM BACKGROUND ===== */
+.gym-bg{position:fixed;inset:0;z-index:0;overflow:hidden}
+.gym-bg::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 60% at 20% 80%, rgba(0,229,255,0.07) 0%, transparent 60%),
+  radial-gradient(ellipse 60% 50% at 80% 20%, rgba(255,107,53,0.06) 0%, transparent 60%),
+  radial-gradient(ellipse 50% 40% at 50% 50%, rgba(185,79,255,0.04) 0%, transparent 70%),
+  linear-gradient(180deg, #06080b 0%, #08101a 50%, #06080b 100%);
+  animation:bgshift 12s ease-in-out infinite alternate}
+@keyframes bgshift{0%{opacity:1;filter:hue-rotate(0deg)}100%{opacity:.85;filter:hue-rotate(15deg)}}
 
-html { scroll-behavior: smooth; }
+/* Grid overlay */
+.gym-grid{position:absolute;inset:0;background-image:
+  linear-gradient(rgba(0,229,255,.018) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,229,255,.018) 1px,transparent 1px);
+  background-size:50px 50px;animation:gm 20s linear infinite}
+@keyframes gm{to{background-position:50px 50px}}
 
-body {
-  background: var(--dark);
-  color: var(--text);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 16px;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
+/* Animated gym silhouette elements */
+.gym-deco{position:absolute;pointer-events:none;opacity:.06}
+.gd1{bottom:0;left:0;width:280px;height:280px;border-right:1px solid var(--cyan);border-top:1px solid var(--cyan);border-radius:0 80px 0 0;animation:pulse-glow 4s ease-in-out infinite}
+.gd2{bottom:0;right:0;width:220px;height:220px;border-left:1px solid var(--orange);border-top:1px solid var(--orange);border-radius:80px 0 0 0;animation:pulse-glow 5s ease-in-out infinite 1s}
+.gd3{top:40%;left:-60px;width:160px;height:160px;border:1px solid var(--purple);border-radius:50%;animation:spin-slow 20s linear infinite}
+.gd4{top:60%;right:-40px;width:100px;height:100px;border:1px solid var(--green);border-radius:50%;animation:spin-slow 15s linear infinite reverse}
+@keyframes pulse-glow{0%,100%{opacity:.06}50%{opacity:.14}}
+@keyframes spin-slow{to{transform:rotate(360deg)}}
 
-/* ── PRELOADER ── */
-#preloader {
-  position: fixed; inset: 0;
-  background: var(--dark);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  z-index: 9999;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
-}
-#preloader.hide { opacity:0; visibility:hidden; }
+/* Floating particles */
+.particles{position:absolute;inset:0;overflow:hidden}
+.particle{position:absolute;width:2px;height:2px;border-radius:50%;animation:float-up linear infinite}
+.particle:nth-child(1){left:10%;background:var(--cyan);animation-duration:8s;animation-delay:0s}
+.particle:nth-child(2){left:25%;background:var(--orange);animation-duration:11s;animation-delay:2s}
+.particle:nth-child(3){left:45%;background:var(--green);animation-duration:9s;animation-delay:4s}
+.particle:nth-child(4){left:65%;background:var(--cyan);animation-duration:13s;animation-delay:1s}
+.particle:nth-child(5){left:80%;background:var(--purple);animation-duration:10s;animation-delay:3s}
+.particle:nth-child(6){left:90%;background:var(--gold);animation-duration:12s;animation-delay:5s}
+.particle:nth-child(7){left:35%;background:var(--red);animation-duration:7s;animation-delay:6s}
+.particle:nth-child(8){left:55%;background:var(--cyan);animation-duration:14s;animation-delay:0.5s}
+@keyframes float-up{0%{bottom:-10px;opacity:0;transform:scale(1)}10%{opacity:1}90%{opacity:.6}100%{bottom:100vh;opacity:0;transform:scale(0.5) translateX(30px)}}
 
-.pre-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2.5rem,8vw,5rem);
-  background: linear-gradient(135deg, var(--fire), var(--gold));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  animation: pulse 1.2s ease-in-out infinite;
-  letter-spacing: 4px;
-}
-.pre-sub {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.75rem; letter-spacing: 6px;
-  color: var(--muted); margin-top: 8px;
-  animation: fadeUp 0.8s ease both;
-}
-.pre-bar-wrap {
-  width: 240px; height: 3px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 99px; margin-top: 40px; overflow: hidden;
-}
-.pre-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--fire), var(--gold));
-  border-radius: 99px;
-  width: 0;
-  animation: load 2.2s cubic-bezier(.4,0,.2,1) forwards;
-}
-.pre-pct {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.7rem; color: var(--gold);
-  margin-top: 10px; letter-spacing: 2px;
-}
+/* Orbs */
+.orb{position:fixed;border-radius:50%;filter:blur(80px);z-index:0;pointer-events:none;animation:of 10s ease-in-out infinite}
+.o1{width:500px;height:500px;background:rgba(0,229,255,.07);top:-150px;left:-150px}
+.o2{width:450px;height:450px;background:rgba(255,107,53,.06);bottom:5%;right:-100px;animation-direction:reverse;animation-duration:13s}
+.o3{width:300px;height:300px;background:rgba(185,79,255,.05);top:40%;left:30%;animation-delay:-4s;animation-duration:8s}
+@keyframes of{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
 
-@keyframes load { to { width:100%; } }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.8;transform:scale(0.97)} }
-@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+/* ===== HEADER ===== */
+header{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(6,8,11,.92);backdrop-filter:blur(28px);border-bottom:1px solid var(--border)}
+.hi{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:16px;height:64px}
+.logo{font-family:var(--fd);font-size:30px;letter-spacing:.08em;color:var(--cyan);text-shadow:0 0 20px rgba(0,229,255,.5);cursor:pointer;flex-shrink:0}
+.logo span{color:var(--orange)}
+nav{display:flex;gap:4px;margin-left:auto}
+.nb{background:none;border:none;color:var(--muted);font-family:var(--fm);font-size:11px;letter-spacing:.2em;padding:8px 14px;border-radius:3px;cursor:pointer;transition:all .2s}
+.nb:hover,.nb.act{color:var(--cyan);background:rgba(0,229,255,.08)}
+.hcta{background:var(--cyan);color:var(--bg);font-family:var(--fm);font-size:11px;letter-spacing:.2em;padding:8px 18px;border-radius:2px;border:none;cursor:pointer;transition:all .2s}
+.hcta:hover{opacity:.85;transform:translateY(-1px)}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px}
+.ham span{width:22px;height:1.5px;background:var(--muted);display:block;transition:all .3s}
+.mnav{display:none;position:fixed;top:64px;left:0;right:0;z-index:998;background:rgba(6,8,11,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 24px;flex-direction:column;gap:4px}
+.mnav.open{display:flex}
+.mnav .nb{text-align:left;padding:12px 16px}
 
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center;
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-}
-.hero-bg {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,69,0,0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(255,215,0,0.1) 0%, transparent 70%),
-    var(--dark);
-}
-.hero-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,69,0,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,69,0,0.07) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: gridMove 20s linear infinite;
-}
-@keyframes gridMove { from{transform:translateY(0)} to{transform:translateY(60px)} }
+/* ===== PAGES ===== */
+.page{display:none;position:relative;z-index:1;padding-top:64px;min-height:100vh}
+.page.act{display:block}
 
-.hero-content { position:relative; z-index:1; }
+/* ===== HOME HERO ===== */
+.hero{min-height:calc(100vh - 64px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 40px}
+.hbadge{font-family:var(--fm);font-size:11px;letter-spacing:.4em;color:var(--cyan);border:1px solid rgba(0,229,255,.25);padding:6px 16px;border-radius:2px;margin-bottom:28px;display:inline-block;opacity:0;animation:fu .8s ease .2s forwards}
+.htitle{font-family:var(--fd);font-size:clamp(68px,13vw,148px);line-height:.88;letter-spacing:.02em;margin-bottom:28px}
+.w1{display:block;opacity:0;animation:su .8s cubic-bezier(.16,1,.3,1) .4s forwards}
+.w2{display:block;color:var(--cyan);text-shadow:0 0 50px rgba(0,229,255,.4);opacity:0;animation:su .8s cubic-bezier(.16,1,.3,1) .6s forwards}
+.w3{display:block;color:var(--orange);text-shadow:0 0 50px rgba(255,107,53,.4);opacity:0;animation:su .8s cubic-bezier(.16,1,.3,1) .8s forwards}
+@keyframes su{from{opacity:0;transform:translateY(70px) skewY(2deg)}to{opacity:1;transform:none}}
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.hsub{font-size:18px;color:var(--muted);max-width:520px;line-height:1.7;margin-bottom:40px;opacity:0;animation:fu .8s ease 1s forwards}
+.hsub strong{color:var(--gold);font-weight:500}
+.hbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:56px;opacity:0;animation:fu .8s ease 1.2s forwards}
+.bp{background:var(--cyan);color:var(--bg);font-family:var(--fd);font-size:20px;letter-spacing:.08em;padding:14px 36px;border:none;border-radius:2px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.bp::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transform:translateX(-100%);transition:.5s}
+.bp:hover::after{transform:translateX(100%)}
+.bp:hover{box-shadow:0 12px 40px rgba(0,229,255,.35);transform:translateY(-2px)}
+.bo{background:none;border:1px solid var(--border2);color:var(--text);font-family:var(--fd);font-size:20px;letter-spacing:.08em;padding:14px 36px;border-radius:2px;cursor:pointer;transition:all .3s}
+.bo:hover{border-color:var(--orange);color:var(--orange)}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;max-width:1000px;margin:0 auto;padding:0 24px 80px;opacity:0;animation:fu .8s ease 1.4s forwards}
+.fc{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:24px;transition:all .3s;cursor:default}
+.fc:hover{border-color:rgba(0,229,255,.2);transform:translateY(-4px);background:var(--card2)}
+.fi{font-size:26px;margin-bottom:10px}
+.fn{font-family:var(--fd);font-size:19px;letter-spacing:.05em;margin-bottom:6px;color:var(--text)}
+.fd2{font-size:13px;color:var(--muted);line-height:1.6}
 
-.hero-badge {
-  display: inline-block;
-  border: 1px solid var(--fire);
-  color: var(--fire);
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.65rem; letter-spacing: 4px;
-  padding: 6px 18px; border-radius: 99px;
-  margin-bottom: 24px;
-  animation: fadeUp 0.6s ease both;
-}
+/* ===== PLANNER ===== */
+.pw{max-width:860px;margin:0 auto;padding:40px 24px 100px}
+.ph{margin-bottom:36px;padding-top:20px}
+.ph h1{font-family:var(--fd);font-size:clamp(40px,7vw,70px);letter-spacing:.03em;line-height:1;color:var(--text)}
+.ph p{color:var(--muted);margin-top:10px;font-size:15px}
+.sb{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:26px;margin-bottom:18px;transition:border-color .3s}
+.sb:focus-within{border-color:rgba(0,229,255,.2)}
+.sh{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.snum{font-family:var(--fm);font-size:10px;letter-spacing:.3em;color:var(--cyan);border:1px solid rgba(0,229,255,.3);padding:3px 10px;border-radius:2px;flex-shrink:0}
+.stit{font-family:var(--fd);font-size:24px;letter-spacing:.05em;color:var(--text)}
+.ssub{font-size:13px;color:var(--muted)}
+.ig{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ib{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:14px 16px;transition:all .3s}
+.ib:focus-within{border-color:var(--cyan);box-shadow:0 0 0 1px rgba(0,229,255,.12)}
+.ib label{display:block;font-family:var(--fm);font-size:9px;letter-spacing:.35em;color:var(--muted);margin-bottom:8px;text-transform:uppercase}
+.ir{display:flex;align-items:baseline;gap:6px}
+.ir input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--fd);font-size:36px;letter-spacing:.02em;width:100%;min-width:0}
+.ir input::placeholder{color:var(--dim)}
+.iu{font-family:var(--fm);font-size:11px;color:var(--muted);white-space:nowrap}
+.bc2{margin-top:16px;background:none;border:1px solid var(--border2);color:var(--text);font-family:var(--fm);font-size:11px;letter-spacing:.2em;padding:10px 22px;border-radius:3px;cursor:pointer;transition:all .2s}
+.bc2:hover{border-color:var(--cyan);color:var(--cyan)}
+.bmic{margin-top:18px;display:none;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:20px;animation:fu .5s ease}
+.btop{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:18px}
+.bnum{font-family:var(--fd);font-size:68px;line-height:1;transition:color .5s}
+.bcat{font-family:var(--fm);font-size:10px;letter-spacing:.2em;color:var(--muted);margin-top:4px;text-transform:uppercase}
+.btip{font-size:13px;color:var(--muted);max-width:200px;text-align:right;line-height:1.6}
+.bsegs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:6px}
+.seg{font-family:var(--fm);font-size:9px;letter-spacing:.08em;text-align:center;padding:4px 2px;border-radius:2px;text-transform:uppercase}
+.s1{background:rgba(0,150,255,.12);color:#0096ff}.s2{background:rgba(57,255,20,.12);color:var(--green)}.s3{background:rgba(255,200,0,.12);color:#ffc800}.s4{background:rgba(255,50,50,.12);color:var(--red)}
+.btrack{height:4px;background:var(--border);border-radius:2px;position:relative;overflow:visible}
+.bdot{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;transform:translateY(-50%);transition:left .8s cubic-bezier(.34,1.56,.64,1),background .5s;left:0}
+.rrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.ro{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:9px 16px;cursor:pointer;font-family:var(--fm);font-size:11px;letter-spacing:.15em;color:var(--muted);transition:all .2s}
+.ro:hover{border-color:var(--border2);color:var(--text)}
+.ro.sel{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.08)}
 
-.hero-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3.5rem, 12vw, 9rem);
-  line-height: 0.95;
-  background: linear-gradient(135deg, #fff 0%, var(--gold) 50%, var(--fire) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  animation: fadeUp 0.7s 0.1s ease both;
-  letter-spacing: 2px;
-}
+/* Goal cards */
+.gg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gc{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:22px 14px;cursor:pointer;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.gc::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:120px;height:120px;border-radius:50%;filter:blur(35px);opacity:0;transition:opacity .4s}
+.gcm::before{background:rgba(0,229,255,.5)}.gcf::before{background:rgba(255,107,53,.5)}.gcn::before{background:rgba(57,255,20,.4)}
+.gc:hover::before,.gc.sel::before{opacity:1}
+.gc:hover{transform:translateY(-4px);border-color:var(--border2)}
+.gc.sel{border-width:2px}.gc.sel.gcm{border-color:var(--cyan)}.gc.sel.gcf{border-color:var(--orange)}.gc.sel.gcn{border-color:var(--green)}
+.gic{font-size:30px;margin-bottom:8px}.gna{font-family:var(--fd);font-size:19px;letter-spacing:.06em;margin-bottom:6px;color:var(--text)}
+.gde{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.gpi{display:inline-block;font-family:var(--fm);font-size:8px;letter-spacing:.2em;border:1px solid var(--border2);color:var(--muted);padding:3px 10px;border-radius:2px}
+.dw{margin-top:14px}
+.dl{font-family:var(--fm);font-size:9px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:8px}
+.dw textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--fb);font-size:15px;padding:14px;resize:none;outline:none;transition:border-color .3s;min-height:80px}
+.dw textarea:focus{border-color:rgba(0,229,255,.3)}
+.dw textarea::placeholder{color:var(--dim)}
 
-.hero-sub {
-  font-size: 1.15rem; color: var(--muted);
-  margin-top: 16px; letter-spacing: 2px;
-  animation: fadeUp 0.7s 0.2s ease both;
-}
+/* Budget */
+.bb{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.rp{font-family:var(--fd);font-size:52px;color:var(--gold)}
+.bb input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--fd);font-size:66px;letter-spacing:-.02em;min-width:0}
+.bb input::placeholder{color:var(--dim)}
+.bh{font-family:var(--fm);font-size:11px;letter-spacing:.15em;margin-bottom:18px;text-transform:uppercase;min-height:18px;transition:color .3s}
+.prs{display:flex;gap:8px;flex-wrap:wrap}
+.pr{background:var(--bg2);border:1px solid var(--border);color:var(--muted);padding:10px 16px;border-radius:3px;cursor:pointer;font-family:var(--fm);font-size:12px;letter-spacing:.1em;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.pr small{font-size:8px;letter-spacing:.2em;text-transform:uppercase}
+.pr:hover{border-color:var(--gold);color:var(--gold)}
 
-.hero-cta {
-  margin-top: 40px;
-  display: inline-block;
-  padding: 16px 48px;
-  background: linear-gradient(135deg, var(--fire), #ff6a00);
-  color: #fff;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.85rem; letter-spacing: 3px;
-  border: none; border-radius: 4px;
-  cursor: pointer;
-  text-transform: uppercase;
-  animation: fadeUp 0.7s 0.3s ease both;
-  position: relative; overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 0 40px rgba(255,69,0,0.4);
-}
-.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(255,69,0,0.6); }
-.hero-cta::after {
-  content:''; position:absolute; inset:0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-  opacity:0; transition: opacity 0.3s;
-}
-.hero-cta:hover::after { opacity:1; }
+/* Workout type selector */
+.wt-sel{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px}
+.wt{background:var(--bg2);border:2px solid var(--border);border-radius:8px;padding:20px 14px;cursor:pointer;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.wt::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .4s}
+.wt-gym::before{background:radial-gradient(circle at 50% 0%, rgba(0,229,255,.2) 0%, transparent 70%)}
+.wt-home::before{background:radial-gradient(circle at 50% 0%, rgba(57,255,20,.2) 0%, transparent 70%)}
+.wt:hover::before,.wt.sel::before{opacity:1}
+.wt:hover{transform:translateY(-3px)}
+.wt.sel.wt-gym{border-color:var(--cyan);box-shadow:0 0 30px rgba(0,229,255,.15)}
+.wt.sel.wt-home{border-color:var(--green);box-shadow:0 0 30px rgba(57,255,20,.15)}
+.wt-icon{font-size:32px;margin-bottom:8px;display:block}
+.wt-name{font-family:var(--fd);font-size:20px;letter-spacing:.06em;color:var(--text);margin-bottom:4px}
+.wt-desc{font-size:11px;color:var(--muted);line-height:1.5}
 
-.hero-stats {
-  display: flex; gap: 48px;
-  margin-top: 60px; justify-content: center;
-  animation: fadeUp 0.7s 0.4s ease both;
-}
-.stat { text-align: center; }
-.stat-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2.4rem; color: var(--gold);
-  line-height: 1;
-}
-.stat-lbl { font-size: 0.75rem; color: var(--muted); letter-spacing: 2px; }
+/* Generate button */
+.gs{padding:20px 0 40px;text-align:center}
+.gb{width:100%;background:linear-gradient(135deg,var(--cyan) 0%,#00b8d4 100%);border:none;border-radius:4px;padding:0;cursor:pointer;transition:all .4s;position:relative;overflow:hidden;max-width:600px}
+.gb:hover{transform:scale(1.02);box-shadow:0 20px 60px rgba(0,229,255,.35)}
+.gb:active{transform:scale(.98)}.gb:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.gi{display:flex;align-items:center;justify-content:center;gap:16px;padding:20px 32px;color:var(--bg);font-family:var(--fd);font-size:24px;letter-spacing:.08em}
+.gsh{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:translateX(-100%);animation:sh 2.5s ease-in-out infinite}
+@keyframes sh{0%{transform:translateX(-100%)}50%,100%{transform:translateX(100%)}}
+.gn2{font-family:var(--fm);font-size:10px;letter-spacing:.2em;color:var(--muted);margin-top:10px;text-transform:uppercase}
 
-/* ── MAIN CONTAINER ── */
-#app {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 20px 80px;
-}
+/* ===== RESULTS ===== */
+.rw{max-width:960px;margin:0 auto;padding:40px 24px 100px}
+.rh{text-align:center;padding:28px 0 36px}
+.rh h1{font-family:var(--fd);font-size:clamp(38px,7vw,68px);letter-spacing:.04em;color:var(--text)}
+.rh p{color:var(--muted);margin-top:8px}
+.lo{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;gap:20px}
+.spin-wrap{position:relative;width:80px;height:80px}
+.spin-outer{width:80px;height:80px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--cyan);animation:sp 1s linear infinite;position:absolute;top:0;left:0}
+.spin-inner{width:56px;height:56px;border-radius:50%;border:2px solid var(--border);border-bottom-color:var(--orange);animation:sp .7s linear infinite reverse;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+@keyframes sp{to{transform:rotate(360deg)}}
+.lt{font-family:var(--fd);font-size:22px;letter-spacing:.1em;color:var(--cyan)}
+.ls{font-size:13px;color:var(--muted);font-family:var(--fm);letter-spacing:.15em;text-transform:uppercase}
+.lt-sub{font-size:13px;color:var(--muted);max-width:300px;text-align:center;line-height:1.7;animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:.5}50%{opacity:1}}
+.rtabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.rt{flex:1;min-width:130px;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px;border-radius:3px;cursor:pointer;font-family:var(--fm);font-size:11px;letter-spacing:.15em;transition:all .2s}
+.rt:hover:not(.act){border-color:var(--border2);color:var(--text)}
+.rt.act{background:var(--cyan);border-color:var(--cyan);color:var(--bg)}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:26px;min-height:400px;margin-bottom:14px}
+.rtxt{font-size:15px;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:var(--fb)}
+.rac{display:flex;gap:10px;flex-wrap:wrap}
+.ab{background:none;border:1px solid var(--border2);color:var(--muted);padding:10px 20px;border-radius:3px;cursor:pointer;font-family:var(--fm);font-size:11px;letter-spacing:.15em;transition:all .2s}
+.ab:hover{color:var(--gold);border-color:var(--gold)}
+.us{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:22px;display:none;flex-wrap:wrap;gap:10px 22px}
+.ul{font-family:var(--fm);font-size:8px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px}
+.uv{font-family:var(--fd);font-size:20px;letter-spacing:.04em;color:var(--text)}
 
-/* ── SECTION CARD ── */
-.section-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: clamp(24px, 5vw, 48px);
-  margin-bottom: 24px;
-  position: relative;
-  overflow: hidden;
-  opacity: 0; transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.section-card.visible { opacity:1; transform:translateY(0); }
+/* ===== BMI PAGE ===== */
+.bpw{max-width:700px;margin:0 auto;padding:40px 24px 80px}
+.bigbmi{font-family:var(--fd);font-size:clamp(80px,15vw,160px);text-align:center;margin:20px 0;transition:color .5s,text-shadow .5s}
+.btbl{width:100%;border-collapse:collapse;margin-top:22px}
+.btbl th{font-family:var(--fm);font-size:9px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border)}
+.btbl td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:14px;color:var(--text)}
+.btbl tr:hover td{background:var(--card2)}
 
-.section-card::before {
-  content:''; position:absolute;
-  top:0; left:0; right:0; height:2px;
-  background: linear-gradient(90deg, var(--fire), var(--gold), transparent);
-}
+/* ===== TIPS ===== */
+.tpw{max-width:900px;margin:0 auto;padding:40px 24px 80px}
+.tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px;margin-top:30px}
+.tc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px;transition:all .3s}
+.tc:hover{border-color:rgba(0,229,255,.2);transform:translateY(-4px)}
+.tn{font-family:var(--fd);font-size:54px;color:var(--dim);line-height:1;margin-bottom:8px}
+.tt{font-family:var(--fd);font-size:21px;letter-spacing:.04em;margin-bottom:8px;color:var(--text)}
+.tb{font-size:14px;color:var(--muted);line-height:1.7}
 
-.section-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  letter-spacing: 3px;
-  margin-bottom: 6px;
-}
-.section-title span { color: var(--fire); }
+/* ===== FOOTER ===== */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:rgba(6,8,11,.8)}
+.fi2{max-width:1200px;margin:0 auto;padding:44px 24px 28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:30px}
+.fb .logo{font-size:34px;margin-bottom:10px}
+.fb p{font-size:13px;color:var(--muted);line-height:1.7;max-width:220px}
+.fc h4{font-family:var(--fm);font-size:10px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+.fc a{display:block;font-size:14px;color:var(--muted);margin-bottom:8px;cursor:pointer;transition:color .2s;text-decoration:none}
+.fc a:hover{color:var(--cyan)}
+.fbot{max-width:1200px;margin:0 auto;padding:18px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.fbot p{font-family:var(--fm);font-size:10px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase}
+.fn3{font-size:11px;color:var(--dim);margin-top:8px}
 
-.section-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 32px; }
+/* ===== REVEAL ===== */
+.rev{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.rev.vis{opacity:1;transform:none}
 
-/* ── INPUTS ── */
-.input-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-}
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid rgba(0,229,255,.3);color:var(--text);padding:12px 24px;border-radius:3px;font-family:var(--fm);font-size:12px;letter-spacing:.08em;z-index:9999;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.6);opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-.field { display: flex; flex-direction: column; gap: 8px; }
+/* ===== LOW BUDGET POPUP ===== */
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9998;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);animation:fadein .3s ease}
+.popup-overlay.open{display:flex}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.popup-box{background:var(--card);border:1px solid rgba(255,107,53,.4);border-radius:12px;padding:36px 32px;max-width:480px;width:90%;text-align:center;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 60px rgba(255,107,53,.1);animation:popscale .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popscale{from{opacity:0;transform:scale(.8) translateY(20px)}to{opacity:1;transform:none}}
+.popup-emoji{font-size:56px;display:block;margin-bottom:16px;animation:shake .5s ease .4s both}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-10deg)}40%{transform:rotate(10deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(8deg)}}
+.popup-title{font-family:var(--fd);font-size:32px;letter-spacing:.05em;color:var(--orange);margin-bottom:12px}
+.popup-msg{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:24px}
+.popup-msg strong{color:var(--text)}
+.popup-btns{display:flex;flex-direction:column;gap:10px}
+.popup-increase{background:linear-gradient(135deg,var(--cyan),#00b8d4);color:var(--bg);font-family:var(--fd);font-size:18px;letter-spacing:.06em;padding:12px 24px;border:none;border-radius:4px;cursor:pointer;transition:all .3s}
+.popup-increase:hover{transform:scale(1.03);box-shadow:0 8px 30px rgba(0,229,255,.3)}
+.popup-proceed{background:none;border:1px solid rgba(255,107,53,.4);color:var(--orange);font-family:var(--fm);font-size:11px;letter-spacing:.2em;padding:10px 24px;border-radius:3px;cursor:pointer;transition:all .2s}
+.popup-proceed:hover{border-color:var(--orange);background:rgba(255,107,53,.08)}
+.popup-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;transition:color .2s}
+.popup-close:hover{color:var(--text)}
 
-.field label {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.65rem; letter-spacing: 3px;
-  color: var(--gold);
-  text-transform: uppercase;
-}
+/* ===== ANIMATED WORKOUT BACKGROUND (Results Page) ===== */
+.workout-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 1s ease}
+.workout-bg.show{opacity:1}
+.wb-dumbbell{position:absolute;font-size:clamp(24px,4vw,48px);opacity:0.07;animation:db-float linear infinite;filter:blur(0.5px)}
+.wb-dumbbell:nth-child(1){left:5%;top:20%;animation-duration:7s;animation-delay:0s;font-size:32px}
+.wb-dumbbell:nth-child(2){right:8%;top:35%;animation-duration:9s;animation-delay:2s;font-size:42px;animation-name:db-float-r}
+.wb-dumbbell:nth-child(3){left:15%;bottom:25%;animation-duration:6s;animation-delay:1s;font-size:28px}
+.wb-dumbbell:nth-child(4){right:20%;bottom:20%;animation-duration:11s;animation-delay:3s;font-size:36px;animation-name:db-float-r}
+.wb-dumbbell:nth-child(5){left:50%;top:15%;animation-duration:8s;animation-delay:4s;font-size:22px}
+.wb-dumbbell:nth-child(6){right:35%;bottom:30%;animation-duration:10s;animation-delay:1.5s;font-size:30px;animation-name:db-float-r}
+@keyframes db-float{0%,100%{transform:translateY(0) rotate(-10deg) scale(1)}25%{transform:translateY(-18px) rotate(5deg) scale(1.05)}50%{transform:translateY(-8px) rotate(-5deg) scale(0.97)}75%{transform:translateY(-22px) rotate(8deg) scale(1.03)}}
+@keyframes db-float-r{0%,100%{transform:translateY(0) rotate(10deg) scale(1)}25%{transform:translateY(-15px) rotate(-6deg) scale(1.04)}50%{transform:translateY(-25px) rotate(10deg) scale(0.98)}75%{transform:translateY(-10px) rotate(-8deg) scale(1.02)}}
+.wb-bar{position:absolute;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,255,0.15),rgba(0,229,255,0.06),transparent);border-radius:2px;animation:bar-sweep linear infinite}
+.wb-bar:nth-child(7){width:60%;left:-10%;top:30%;animation-duration:6s;animation-delay:0s}
+.wb-bar:nth-child(8){width:40%;right:-5%;top:60%;animation-duration:8s;animation-delay:2s}
+.wb-bar:nth-child(9){width:50%;left:20%;top:75%;animation-duration:7s;animation-delay:4s;background:linear-gradient(90deg,transparent,rgba(255,107,53,0.12),rgba(255,107,53,0.05),transparent)}
+@keyframes bar-sweep{0%{opacity:0;transform:translateX(-30px)}20%{opacity:1}80%{opacity:0.6}100%{opacity:0;transform:translateX(30px)}}
+.wb-ring{position:absolute;border-radius:50%;border:1px solid;animation:ring-pulse ease-out infinite}
+.wb-ring:nth-child(10){width:200px;height:200px;border-color:rgba(0,229,255,0.08);top:10%;left:-80px;animation-duration:5s;animation-delay:0s}
+.wb-ring:nth-child(11){width:300px;height:300px;border-color:rgba(255,107,53,0.06);bottom:5%;right:-100px;animation-duration:7s;animation-delay:2s}
+.wb-ring:nth-child(12){width:150px;height:150px;border-color:rgba(57,255,20,0.08);top:50%;left:40%;animation-duration:4s;animation-delay:1s}
+@keyframes ring-pulse{0%{transform:scale(0.8);opacity:0}50%{opacity:1}100%{transform:scale(1.4);opacity:0}}
+.wb-bolt{position:absolute;width:1px;background:linear-gradient(180deg,transparent,rgba(0,229,255,0.3),rgba(0,229,255,0.1),transparent);animation:bolt-strike linear infinite}
+.wb-bolt:nth-child(13){height:120px;left:25%;top:0;animation-duration:4s;animation-delay:1s}
+.wb-bolt:nth-child(14){height:80px;right:30%;bottom:0;animation-duration:5s;animation-delay:3s;background:linear-gradient(180deg,transparent,rgba(255,107,53,0.25),transparent)}
+.wb-bolt:nth-child(15){height:100px;left:60%;top:20%;animation-duration:6s;animation-delay:0.5s}
+@keyframes bolt-strike{0%{opacity:0;transform:scaleY(0) translateY(-20px)}10%{opacity:1;transform:scaleY(1)}80%{opacity:0.4}100%{opacity:0;transform:scaleY(0.5) translateY(20px)}}
+.wb-words{position:absolute;inset:0;overflow:hidden}
+.wb-word{position:absolute;font-family:var(--fd);font-size:clamp(60px,10vw,120px);letter-spacing:.2em;opacity:0.025;color:var(--cyan);white-space:nowrap;animation:word-drift linear infinite}
+.wb-word:nth-child(1){top:10%;left:-10%;animation-duration:25s;animation-delay:0s}
+.wb-word:nth-child(2){top:45%;left:-20%;animation-duration:30s;animation-delay:8s;color:var(--orange);font-size:80px}
+.wb-word:nth-child(3){top:72%;left:-5%;animation-duration:20s;animation-delay:14s;color:var(--green);font-size:60px}
+@keyframes word-drift{0%{transform:translateX(0)}100%{transform:translateX(120vw)}}
+.wb-sweat{position:absolute;width:4px;height:4px;border-radius:50%;animation:sweat-burst linear infinite}
+.wb-sweat:nth-child(16){left:30%;top:40%;background:var(--cyan);animation-duration:3s;animation-delay:0s;box-shadow:0 0 8px var(--cyan)}
+.wb-sweat:nth-child(17){left:70%;top:55%;background:var(--orange);animation-duration:4s;animation-delay:1s;box-shadow:0 0 8px var(--orange)}
+.wb-sweat:nth-child(18){left:50%;top:25%;background:var(--green);animation-duration:3.5s;animation-delay:2s;box-shadow:0 0 8px var(--green)}
+@keyframes sweat-burst{0%{opacity:0;transform:scale(0)}30%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0) translate(40px,-60px)}}
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){nav,.hcta{display:none}.ham{display:flex}.ig{grid-template-columns:1fr}.gg{grid-template-columns:1fr}.fi2{grid-template-columns:1fr}.btop{flex-direction:column}.btip{text-align:left;max-width:100%}.gi{font-size:19px;padding:15px 20px}.wt-sel{grid-template-columns:1fr}}
+@media(max-width:480px){.hbtns{flex-direction:column;align-items:center}.rtabs{flex-direction:column}.fbot{flex-direction:column;text-align:center}}
 
-.field input, .field select {
-  background: var(--card2);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  color: var(--text);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.05rem; font-weight: 600;
-  padding: 14px 16px;
-  outline: none;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  width: 100%;
-}
-.field input:focus, .field select:focus {
-  border-color: var(--fire);
-  box-shadow: 0 0 0 3px rgba(255,69,0,0.15);
-}
-.field select option { background: #1a1a2e; }
-
-/* ── BMI DISPLAY ── */
-.bmi-display {
-  background: var(--card2);
-  border-radius: 16px;
-  padding: 32px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.07);
-  margin-top: 24px;
-  display: none;
-}
-.bmi-display.show { display: block; animation: fadeUp 0.5s ease both; }
-
-.bmi-number {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 5rem; line-height: 1;
-  background: linear-gradient(135deg, var(--fire), var(--gold));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-
-.bmi-label {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.8rem; letter-spacing: 3px;
-  margin-top: 6px;
-}
-
-.bmi-bar-track {
-  width: 100%; height: 10px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 99px;
-  margin: 20px auto;
-  position: relative; overflow: hidden;
-}
-.bmi-bar-fill {
-  height: 100%; border-radius: 99px;
-  transition: width 1.2s cubic-bezier(.4,0,.2,1), background 0.5s;
-}
-
-.bmi-suggestion {
-  font-size: 1rem; color: var(--text);
-  margin-top: 12px; line-height: 1.7;
-}
-
-/* ── GOAL PILLS ── */
-.goal-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-}
-
-.goal-pill {
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  background: var(--card2);
-  position: relative; overflow: hidden;
-}
-.goal-pill::before {
-  content:''; position:absolute; inset:0;
-  background: linear-gradient(135deg, var(--fire), var(--gold));
-  opacity:0; transition: opacity 0.3s;
-}
-.goal-pill:hover { border-color: var(--fire); transform: translateY(-2px); }
-.goal-pill.active { border-color: var(--fire); box-shadow: 0 0 24px rgba(255,69,0,0.3); }
-.goal-pill.active::before { opacity: 0.08; }
-
-.goal-icon { font-size: 2rem; display: block; margin-bottom: 8px; position:relative; z-index:1; }
-.goal-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.3rem; letter-spacing: 2px;
-  position:relative; z-index:1;
-}
-.goal-sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; position:relative; z-index:1; }
-
-/* ── BUDGET ── */
-.budget-options {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.budget-btn {
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
-  padding: 14px 10px;
-  cursor: pointer;
-  text-align: center;
-  background: var(--card2);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1rem; font-weight: 600;
-  color: var(--text);
-  transition: all 0.3s;
-}
-.budget-btn:hover { border-color: var(--gold); }
-.budget-btn.active { border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); color: var(--gold); }
-
-.custom-budget-wrap {
-  display: none; margin-top: 12px;
-}
-.custom-budget-wrap.show { display: block; animation: fadeUp 0.4s ease both; }
-
-/* ── GENERATE BTN ── */
-.generate-btn {
-  width: 100%;
-  padding: 20px;
-  background: linear-gradient(135deg, var(--fire) 0%, #ff6a00 50%, var(--gold) 100%);
-  border: none; border-radius: 12px;
-  color: #fff;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.6rem; letter-spacing: 5px;
-  cursor: pointer;
-  position: relative; overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 8px 40px rgba(255,69,0,0.4);
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-}
-.generate-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 60px rgba(255,69,0,0.6); }
-.generate-btn:active { transform: translateY(0); }
-.generate-btn::after {
-  content:''; position:absolute;
-  top:-50%; left:-60%; width:40%; height:200%;
-  background: rgba(255,255,255,0.15);
-  transform: skewX(-20deg);
-  animation: shine 3s infinite;
-}
-@keyframes shine { 0%{left:-60%} 100%{left:160%} }
-
-/* ── LOADING ── */
-.loading-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(8,8,16,0.95);
-  z-index: 1000;
-  flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 20px;
-}
-.loading-overlay.show { display: flex; }
-
-.loading-spinner {
-  width: 64px; height: 64px;
-  border: 3px solid rgba(255,255,255,0.1);
-  border-top-color: var(--fire);
-  border-right-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.loading-text {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.8rem; letter-spacing: 4px;
-  color: var(--gold);
-  animation: blink 1.4s ease-in-out infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-/* ── RESULT ── */
-#result-section {
-  display: none;
-  margin-top: 32px;
-}
-#result-section.show { display: block; }
-
-.result-tabs {
-  display: flex; gap: 12px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
-
-.tab-btn {
-  padding: 10px 24px;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 99px;
-  background: var(--card2);
-  color: var(--muted);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.95rem; font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  letter-spacing: 1px;
-}
-.tab-btn:hover { border-color: var(--fire); color: var(--text); }
-.tab-btn.active { border-color: var(--fire); background: rgba(255,69,0,0.12); color: var(--fire); }
-
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeUp 0.4s ease both; }
-
-/* ── PLAN CONTENT ── */
-.plan-content {
-  background: var(--card2);
-  border-radius: 12px;
-  padding: clamp(20px, 4vw, 36px);
-  border: 1px solid rgba(255,255,255,0.07);
-  line-height: 1.9;
-  font-size: 1rem;
-  white-space: pre-wrap;
-}
-
-.plan-content h2 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.6rem; letter-spacing: 3px;
-  color: var(--gold); margin: 24px 0 12px;
-}
-.plan-content h3 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.2rem; letter-spacing: 2px;
-  color: var(--fire); margin: 18px 0 8px;
-}
-.plan-content ul { padding-left: 20px; }
-.plan-content li { margin: 6px 0; }
-.plan-content strong { color: var(--gold); }
-.plan-content em { color: var(--neon); font-style: normal; font-weight: 600; }
-
-/* ── POPUP ── */
-.popup-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(8,8,16,0.92);
-  z-index: 2000;
-  align-items: center; justify-content: center;
-  padding: 20px;
-}
-.popup-overlay.show { display: flex; }
-
-.popup-box {
-  background: var(--card);
-  border: 1px solid var(--fire);
-  border-radius: 20px;
-  padding: 48px 36px;
-  text-align: center;
-  max-width: 420px; width: 100%;
-  animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
-  position: relative;
-}
-@keyframes popIn {
-  from { opacity:0; transform:scale(0.7) translateY(30px); }
-  to   { opacity:1; transform:scale(1) translateY(0); }
-}
-
-.popup-emoji {
-  font-size: 4.5rem;
-  display: block;
-  animation: thumbShake 0.6s 0.3s ease both;
-}
-@keyframes thumbShake {
-  0%{transform:rotate(-15deg) scale(0.5)} 40%{transform:rotate(10deg) scale(1.2)}
-  70%{transform:rotate(-5deg) scale(0.95)} 100%{transform:rotate(0) scale(1)}
-}
-
-.popup-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2rem; letter-spacing: 3px;
-  color: var(--fire); margin: 16px 0 10px;
-}
-
-.popup-msg {
-  font-size: 1.05rem;
-  color: var(--text);
-  line-height: 1.8;
-  margin-bottom: 28px;
-}
-
-.popup-close {
-  padding: 14px 36px;
-  background: linear-gradient(135deg, var(--fire), #ff6a00);
-  border: none; border-radius: 8px;
-  color: #fff;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.8rem; letter-spacing: 2px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.popup-close:hover { transform: scale(1.05); }
-
-/* ── FOOTER ── */
-footer {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--muted);
-  font-size: 0.85rem;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-footer span { color: var(--fire); }
-
-/* ── SCROLL INDICATOR ── */
-.scroll-down {
-  position: absolute; bottom: 40px;
-  left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center;
-  gap: 8px; color: var(--muted);
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.6rem; letter-spacing: 3px;
-  animation: bounce 2s ease-in-out infinite;
-}
-.scroll-down svg { color: var(--fire); }
-@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 600px) {
-  .hero-stats { gap: 24px; }
-  .stat-num { font-size: 1.8rem; }
-  .budget-options { grid-template-columns: 1fr 1fr; }
-}
+::selection{background:rgba(0,229,255,.2)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 </style>
 </head>
 <body>
 
-<!-- PRELOADER -->
-<div id="preloader">
-  <div class="pre-logo">SKINNY TO FIT</div>
-  <div class="pre-sub">TRANSFORM YOUR BODY</div>
-  <div class="pre-bar-wrap"><div class="pre-bar"></div></div>
-  <div class="pre-pct" id="prePercent">0%</div>
+<!-- ANIMATED GYM BACKGROUND -->
+<div class="gym-bg">
+  <div class="gym-grid"></div>
+  <div class="gym-deco gd1"></div>
+  <div class="gym-deco gd2"></div>
+  <div class="gym-deco gd3"></div>
+  <div class="gym-deco gd4"></div>
+  <div class="particles">
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div>
+  </div>
+</div>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+
+<!-- ANIMATED WORKOUT BACKGROUND (shown on results page) -->
+<div class="workout-bg" id="workoutBg">
+  <div class="wb-dumbbell">🏋️</div>
+  <div class="wb-dumbbell">💪</div>
+  <div class="wb-dumbbell">🥊</div>
+  <div class="wb-dumbbell">⚡</div>
+  <div class="wb-dumbbell">🔥</div>
+  <div class="wb-dumbbell">🏋️</div>
+  <div class="wb-bar"></div>
+  <div class="wb-bar"></div>
+  <div class="wb-bar"></div>
+  <div class="wb-ring"></div>
+  <div class="wb-ring"></div>
+  <div class="wb-ring"></div>
+  <div class="wb-bolt"></div>
+  <div class="wb-bolt"></div>
+  <div class="wb-bolt"></div>
+  <div class="wb-words">
+    <div class="wb-word">BEAST MODE</div>
+    <div class="wb-word">GAINS</div>
+    <div class="wb-word">NO PAIN NO GAIN</div>
+  </div>
+  <div class="wb-sweat"></div>
+  <div class="wb-sweat"></div>
+  <div class="wb-sweat"></div>
 </div>
 
-<!-- POPUP -->
+<!-- LOW BUDGET POPUP -->
 <div class="popup-overlay" id="budgetPopup">
   <div class="popup-box">
-    <span class="popup-emoji">👎</span>
-    <div class="popup-title">Bhai Seriously?!</div>
+    <button class="popup-close" onclick="closePopup()">✕</button>
+    <span class="popup-emoji">🤜</span>
+    <div class="popup-title">BHAI ITNA KAM?!</div>
     <div class="popup-msg">
-      ₹1000 se kam mein body banana chahta hai? 😂<br><br>
-      <strong>Bhai teri body nahi banegi!</strong><br>
-      Tu mutthi maar aur ghar baith! 🤣<br><br>
-      Kam se kam ₹1000+ toh laga bhai, apne aap pe thoda invest kar!
+      Tu <strong id="popupBudgetShow">₹XXX</strong> budget mein body banana chahta hai?<br>
+      <strong>Yaar, sale mutthi he maar!</strong> 😂<br><br>
+      Itne kam mein toh sirf roti-dal milegi, muscle gain ke liye minimum ₹1,500 chahiye.<br>
+      <strong>Budget badha, tab body banegi!</strong> 💪
     </div>
-    <button class="popup-close" onclick="closePopup()">THEEK HAI BHAI 😅</button>
+    <div class="popup-btns">
+      <button class="popup-increase" onclick="increaseBudget()">💰 BUDGET BADHA DO (₹1,500 set karo)</button>
+      <button class="popup-proceed" onclick="proceedAnyway()">Haan bhai, mujhe pata hai — phir bhi try karo</button>
+    </div>
   </div>
 </div>
 
-<!-- LOADING -->
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="loading-spinner"></div>
-  <div class="loading-text">GENERATING YOUR PLAN...</div>
+<!-- HEADER -->
+<header>
+  <div class="hi">
+    <div class="logo" onclick="go('home')">S<span>2</span>F</div>
+    <nav>
+      <button class="nb act" id="nb-home" onclick="go('home')">HOME</button>
+      <button class="nb" id="nb-planner" onclick="go('planner')">PLANNER</button>
+      <button class="nb" id="nb-bmi" onclick="go('bmi')">BMI GUIDE</button>
+      <button class="nb" id="nb-tips" onclick="go('tips')">TIPS</button>
+    </nav>
+    <button class="hcta" onclick="go('planner')">START FREE →</button>
+    <button class="ham" onclick="tmn()"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<div class="mnav" id="mn">
+  <button class="nb" onclick="go('home');tmn()">🏠 HOME</button>
+  <button class="nb" onclick="go('planner');tmn()">📋 PLANNER</button>
+  <button class="nb" onclick="go('bmi');tmn()">📊 BMI GUIDE</button>
+  <button class="nb" onclick="go('tips');tmn()">💡 TIPS</button>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-badge">🔥 AI POWERED FITNESS PLANNER</div>
-    <h1 class="hero-title">SKINNY<br>TO FIT</h1>
-    <p class="hero-sub">Apna body transform kar — Diet + Workout + Budget sab ek jagah</p>
-    <button class="hero-cta" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})">
-      SHURU KAREN ⚡
-    </button>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">10K+</div><div class="stat-lbl">Users</div></div>
-      <div class="stat"><div class="stat-num">95%</div><div class="stat-lbl">Results</div></div>
-      <div class="stat"><div class="stat-num">AI</div><div class="stat-lbl">Powered</div></div>
+<!-- PAGE: HOME -->
+<div class="page act" id="pg-home">
+  <section class="hero">
+    <div class="hbadge">🔥 AI-POWERED FITNESS PLANNER</div>
+    <h1 class="htitle"><span class="w1">SKINNY</span><span class="w2">TO</span><span class="w3">FIT</span></h1>
+    <p class="hsub">Apni age, height, weight daalo — AI tera <strong>personal diet + workout plan</strong> banayega bilkul <strong>budget ke hisab se</strong></p>
+    <div class="hbtns">
+      <button class="bp" onclick="go('planner')">APNA PLAN BANAO →</button>
+      <button class="bo" onclick="go('bmi')">BMI GUIDE DEKHLO</button>
     </div>
+  </section>
+  <div class="feats">
+    <div class="fc rev"><div class="fi">⚡</div><div class="fn">INSTANT BMI</div><div class="fd2">Second mein tera BMI calculate karo aur jaano tu kahan hai</div></div>
+    <div class="fc rev"><div class="fi">🤖</div><div class="fn">AI DIET PLAN</div><div class="fd2">7-din ka complete Indian diet plan, goal aur budget ke hisab se</div></div>
+    <div class="fc rev"><div class="fi">🏋️</div><div class="fn">GYM + HOME</div><div class="fd2">Gym ya ghar — apni choice ke hisab se full week workout plan</div></div>
+    <div class="fc rev"><div class="fi">💰</div><div class="fn">BUDGET BASED</div><div class="fd2">₹1500 se ₹12000+ — sab budgets ke liye affordable Indian food</div></div>
+    <div class="fc rev"><div class="fi">📋</div><div class="fn">COPY & SAVE</div><div class="fd2">Plan copy karo, notes mein save karo — bilkul free, koi limit nahi</div></div>
+    <div class="fc rev"><div class="fi">💡</div><div class="fn">PRO TIPS</div><div class="fd2">Evidence-based fitness tips jo actually kaam karte hain</div></div>
   </div>
-  <div class="scroll-down">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10l5 5 5-5"/></svg>
-    SCROLL
-  </div>
-</section>
-
-<!-- APP -->
-<div id="app">
-
-  <!-- STEP 1: Details -->
-  <div class="section-card" id="step1">
-    <div class="section-title">STEP 1 — <span>APNI DETAILS</span></div>
-    <div class="section-desc">Apni sahi information daal taki accurate plan mile</div>
-    <div class="input-grid">
-      <div class="field">
-        <label>Umar (Years)</label>
-        <input type="number" id="age" placeholder="e.g. 22" min="10" max="80">
-      </div>
-      <div class="field">
-        <label>Gender</label>
-        <select id="gender">
-          <option value="">Select...</option>
-          <option value="male">Male 👦</option>
-          <option value="female">Female 👧</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Height (cm)</label>
-        <input type="number" id="height" placeholder="e.g. 175" min="100" max="250">
-      </div>
-      <div class="field">
-        <label>Weight (kg)</label>
-        <input type="number" id="weight" placeholder="e.g. 65" min="30" max="300">
-      </div>
-      <div class="field">
-        <label>Activity Level</label>
-        <select id="activity">
-          <option value="">Select...</option>
-          <option value="sedentary">Sedentary (Ghar pe baitha)</option>
-          <option value="light">Light (Thodi walk)</option>
-          <option value="moderate">Moderate (Week mein 3-4 din exercise)</option>
-          <option value="active">Active (Roz exercise)</option>
-          <option value="veryactive">Very Active (Athlete level)</option>
-        </select>
-      </div>
+  <footer>
+    <div class="fi2">
+      <div class="fb"><div class="logo">S<span style="color:var(--orange)">2</span>F</div><p>Free AI fitness planner for Indians. Apna best version bano.</p><p class="fn3">⚠️ Serious health issues mein doctor se milna zaroori hai.</p></div>
+      <div class="fc"><h4>Pages</h4><a onclick="go('home')">Home</a><a onclick="go('planner')">AI Planner</a><a onclick="go('bmi')">BMI Guide</a><a onclick="go('tips')">Fitness Tips</a></div>
+      <div class="fc"><h4>Goals</h4><a onclick="go('planner')">💪 Muscle Gain</a><a onclick="go('planner')">🔥 Fat Loss</a><a onclick="go('planner')">⚖️ Maintain</a></div>
     </div>
-    <div class="bmi-display" id="bmiDisplay">
-      <div class="bmi-number" id="bmiVal">—</div>
-      <div class="bmi-label" id="bmiCat">BMI INDEX</div>
-      <div class="bmi-bar-track"><div class="bmi-bar-fill" id="bmiBar"></div></div>
-      <div class="bmi-suggestion" id="bmiSugg"></div>
-    </div>
-  </div>
-
-  <!-- STEP 2: Goal -->
-  <div class="section-card" id="step2">
-    <div class="section-title">STEP 2 — <span>APNA GOAL</span></div>
-    <div class="section-desc">Kya achieve karna chahte ho?</div>
-    <div class="goal-grid">
-      <div class="goal-pill" onclick="selectGoal(this,'muscle_gain')">
-        <span class="goal-icon">💪</span>
-        <div class="goal-title">Muscle Gain</div>
-        <div class="goal-sub">Body banao, mass badao</div>
-      </div>
-      <div class="goal-pill" onclick="selectGoal(this,'fat_loss')">
-        <span class="goal-icon">🔥</span>
-        <div class="goal-title">Fat Loss</div>
-        <div class="goal-sub">Pet kam karo, slim bano</div>
-      </div>
-      <div class="goal-pill" onclick="selectGoal(this,'maintain')">
-        <span class="goal-icon">⚖️</span>
-        <div class="goal-title">Maintain</div>
-        <div class="goal-sub">Current body maintain karo</div>
-      </div>
-      <div class="goal-pill" onclick="selectGoal(this,'body_recomp')">
-        <span class="goal-icon">🏆</span>
-        <div class="goal-title">Body Recomp</div>
-        <div class="goal-sub">Fat lose + Muscle gain saath</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- STEP 3: Budget -->
-  <div class="section-card" id="step3">
-    <div class="section-title">STEP 3 — <span>MONTHLY BUDGET</span></div>
-    <div class="section-desc">Khane pe mahine mein kitna kharch kar sakte ho?</div>
-    <div class="budget-options">
-      <div class="budget-btn" onclick="selectBudget(this,'1000-2000','₹1K–2K')">₹1,000–2,000</div>
-      <div class="budget-btn" onclick="selectBudget(this,'2000-4000','₹2K–4K')">₹2,000–4,000</div>
-      <div class="budget-btn" onclick="selectBudget(this,'4000-7000','₹4K–7K')">₹4,000–7,000</div>
-      <div class="budget-btn" onclick="selectBudget(this,'7000-12000','₹7K–12K')">₹7,000–12,000</div>
-      <div class="budget-btn" onclick="selectBudget(this,'12000+','₹12K+')">₹12,000+</div>
-      <div class="budget-btn" onclick="openCustomBudget(this)">Custom Amount ✏️</div>
-    </div>
-    <div class="custom-budget-wrap" id="customWrap">
-      <div class="field">
-        <label>Custom Budget (₹ per month)</label>
-        <input type="number" id="customBudget" placeholder="e.g. 3500" min="1" oninput="checkCustomBudget()">
-      </div>
-    </div>
-  </div>
-
-  <!-- GENERATE -->
-  <div class="section-card" id="genSection">
-    <button class="generate-btn" onclick="generatePlan()">
-      ⚡ GENERATE MY PLAN ⚡
-    </button>
-  </div>
-
-  <!-- RESULT -->
-  <div id="result-section">
-    <div class="section-card visible" style="opacity:1;transform:none">
-      <div class="section-title">YOUR <span>COMPLETE PLAN</span></div>
-      <div class="result-tabs">
-        <button class="tab-btn active" onclick="switchTab(this,'dietTab')">🥗 Diet Plan</button>
-        <button class="tab-btn" onclick="switchTab(this,'workoutTab')">💪 Workout Plan</button>
-        <button class="tab-btn" onclick="switchTab(this,'tipsTab')">💡 Pro Tips</button>
-      </div>
-      <div class="tab-content active" id="dietTab">
-        <div class="plan-content" id="dietContent">Loading...</div>
-      </div>
-      <div class="tab-content" id="workoutTab">
-        <div class="plan-content" id="workoutContent">Loading...</div>
-      </div>
-      <div class="tab-content" id="tipsTab">
-        <div class="plan-content" id="tipsContent">Loading...</div>
-      </div>
-    </div>
-  </div>
-
+    <div class="fbot"><p>© 2026 SKINNY TO FIT — FREE AI FITNESS PLANNER</p><p>MADE WITH ❤️ FOR INDIA</p></div>
+  </footer>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  Made with ❤️ by <span>Skinny To Fit</span> | Body toh aaise hi banegi bhai 🔥
-</footer>
+<!-- PAGE: PLANNER -->
+<div class="page" id="pg-planner">
+  <div class="pw">
+    <div class="ph"><h1>AI <span style="color:var(--cyan)">PLANNER</span></h1><p>Sabhi steps fill karo — AI tera poora plan banayega</p></div>
+
+    <!-- Step 1: Details -->
+    <div class="sb rev">
+      <div class="sh"><span class="snum">STEP 01</span><div><div class="stit">TERI DETAILS</div><div class="ssub">Basic info daalo</div></div></div>
+      <div class="ig">
+        <div class="ib"><label>UMAR</label><div class="ir"><input type="number" id="age" placeholder="22" min="10" max="80"><span class="iu">saal</span></div></div>
+        <div class="ib"><label>LAMBAI</label><div class="ir"><input type="number" id="ht" placeholder="170" min="100" max="250"><span class="iu">cm</span></div></div>
+        <div class="ib"><label>WAZN</label><div class="ir"><input type="number" id="wt" placeholder="65" min="20" max="300"><span class="iu">kg</span></div></div>
+      </div>
+      <div style="margin-top:14px"><div class="dl" style="display:block;margin-bottom:8px">GENDER</div>
+        <div class="rrow"><div class="ro sel" id="gm" onclick="sr('g','gm','Male')">♂ Male</div><div class="ro" id="gf" onclick="sr('g','gf','Female')">♀ Female</div></div>
+      </div>
+      <div style="margin-top:14px"><div class="dl" style="display:block;margin-bottom:8px">ACTIVITY LEVEL</div>
+        <div class="rrow">
+          <div class="ro sel" id="as" onclick="sr('a','as','Sedentary')">😴 Sedentary</div>
+          <div class="ro" id="al" onclick="sr('a','al','Lightly Active')">🚶 Light</div>
+          <div class="ro" id="am" onclick="sr('a','am','Moderately Active')">🏃 Moderate</div>
+          <div class="ro" id="av" onclick="sr('a','av','Very Active')">🔥 Very Active</div>
+        </div>
+      </div>
+      <button class="bc2" style="margin-top:18px" onclick="cb()">⚡ BMI CALCULATE KARO</button>
+      <div class="bmic" id="bc">
+        <div class="btop"><div><div class="bnum" id="bv">--</div><div class="bcat" id="bct">--</div></div><div class="btip" id="btp"></div></div>
+        <div class="bsegs"><div class="seg s1">Underweight</div><div class="seg s2">Normal</div><div class="seg s3">Overweight</div><div class="seg s4">Obese</div></div>
+        <div class="btrack"><div class="bdot" id="bd"></div></div>
+      </div>
+    </div>
+
+    <!-- Step 2: Goal -->
+    <div class="sb rev">
+      <div class="sh"><span class="snum">STEP 02</span><div><div class="stit">TERA GOAL</div><div class="ssub">Ek goal choose karo</div></div></div>
+      <div class="gg">
+        <div class="gc gcm" id="gcm" onclick="sg('muscle')"><div class="gic">💪</div><div class="gna">MUSCLE GAIN</div><div class="gde">Muscles banao, strong bano, body transform karo</div><div class="gpi">HIGH PROTEIN</div></div>
+        <div class="gc gcf" id="gcf" onclick="sg('fatloss')"><div class="gic">🔥</div><div class="gna">FAT LOSS</div><div class="gde">Wazn ghataao, lean bano, slim figure pao</div><div class="gpi">CALORIE DEFICIT</div></div>
+        <div class="gc gcn" id="gcn" onclick="sg('maintain')"><div class="gic">⚖️</div><div class="gna">MAINTAIN</div><div class="gde">Fit raho, balance rakho, energy improve karo</div><div class="gpi">BALANCED</div></div>
+      </div>
+      <div class="dw" style="margin-top:14px"><label class="dl">SPECIFIC GOAL (OPTIONAL)</label><textarea id="gd" placeholder="Jaise: 3 mahine mein 5 kg gain karna hai... shaadi se pehle slim hona hai..."></textarea></div>
+    </div>
+
+    <!-- Step 3: Workout Type -->
+    <div class="sb rev">
+      <div class="sh"><span class="snum">STEP 03</span><div><div class="stit">WORKOUT TYPE</div><div class="ssub">Gym jaoge ya ghar pe workout karoge?</div></div></div>
+      <div class="wt-sel">
+        <div class="wt wt-gym sel" id="wt-gym" onclick="swt('gym')">
+          <span class="wt-icon">🏋️</span>
+          <div class="wt-name">GYM WORKOUT</div>
+          <div class="wt-desc">Barbells, dumbbells, machines — full gym equipment ke saath heavy training</div>
+        </div>
+        <div class="wt wt-home" id="wt-home" onclick="swt('home')">
+          <span class="wt-icon">🏠</span>
+          <div class="wt-name">HOME WORKOUT</div>
+          <div class="wt-desc">Bina gym ke ghar pe bodyweight + minimal equipment se fitness</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Budget -->
+    <div class="sb rev" id="bud-section">
+      <div class="sh"><span class="snum">STEP 04</span><div><div class="stit">MONTHLY BUDGET</div><div class="ssub">Sirf khane ka budget daalo (₹)</div></div></div>
+      <div class="bb"><span class="rp">₹</span><input type="number" id="bud" placeholder="3000" min="1" oninput="ub()"></div>
+      <div class="bh" id="bhi">—</div>
+      <div class="prs">
+        <div class="pr" onclick="sb2(1500)">₹1,500<small>Tight</small></div>
+        <div class="pr" onclick="sb2(3000)">₹3,000<small>Average</small></div>
+        <div class="pr" onclick="sb2(5000)">₹5,000<small>Good</small></div>
+        <div class="pr" onclick="sb2(8000)">₹8,000<small>Comfortable</small></div>
+        <div class="pr" onclick="sb2(12000)">₹12,000<small>Premium</small></div>
+      </div>
+    </div>
+
+    <!-- Generate -->
+    <div class="gs">
+      <button class="gb" id="gbtn" onclick="gen()">
+        <div class="gi"><span>✨</span><span id="gtxt">MERA PLAN GENERATE KARO</span><span>→</span></div>
+        <div class="gsh"></div>
+      </button>
+      <div class="gn2">AI 30–60 sec mein tera complete plan bana dega • Ctrl+Enter</div>
+    </div>
+  </div>
+  <footer>
+    <div class="fi2">
+      <div class="fb"><div class="logo">S<span style="color:var(--orange)">2</span>F</div><p>Free AI fitness planner. Apna best version bano.</p></div>
+      <div class="fc"><h4>Pages</h4><a onclick="go('home')">Home</a><a onclick="go('bmi')">BMI Guide</a><a onclick="go('tips')">Tips</a></div>
+      <div class="fc"><h4>Quick Help</h4><a onclick="toast2('Height cm mein daalo! 5ft 7in = 170cm')">Height convert kaise?</a><a onclick="toast2('Subah khali pet wazn lo — sabse accurate!')">Wazn kab maapein?</a><a onclick="toast2('Sirf grocery ka budget — gym fees nahi!')">Budget mein kya?</a></div>
+    </div>
+    <div class="fbot"><p>© 2026 SKINNY TO FIT</p><p>100% FREE • NO ADS • AI POWERED</p></div>
+  </footer>
+</div>
+
+<!-- PAGE: RESULTS -->
+<div class="page" id="pg-results">
+  <div class="rw">
+    <div class="rh"><h1>TERA PLAN <span style="color:var(--cyan)">READY</span> HAI 🎉</h1><p>AI ne tere liye personalized plan banaya hai</p></div>
+    <div class="us" id="usum"></div>
+    <div class="lo" id="ldr">
+      <div class="spin-wrap">
+        <div class="spin-outer"></div>
+        <div class="spin-inner"></div>
+      </div>
+      <div class="lt" id="loaderTitle">AI KAM KAR RAHA HAI...</div>
+      <div class="ls">Diet + Workout dono ban rahe hain</div>
+      <div class="lt-sub" id="loaderMsg">Bhai wait kar, body banne mein time lagta hai 🏗️</div>
+    </div>
+    <div id="rmain" style="display:none">
+      <div class="rtabs"><div class="rt act" id="rtd" onclick="stab('diet')">🥗 Diet Plan</div><div class="rt" id="rtw" onclick="stab('workout')">🏋️ Workout Plan</div></div>
+      <div class="rc"><div class="rtxt" id="rtxt"></div></div>
+      <div class="rac"><button class="ab" onclick="cp()">📋 Plan Copy Karo</button><button class="ab" onclick="go('planner')">↩ Dobara Banao</button></div>
+    </div>
+  </div>
+  <footer>
+    <div class="fi2">
+      <div class="fb"><div class="logo">S<span style="color:var(--orange)">2</span>F</div><p>Tera plan ready hai — ab action lo! 💪</p></div>
+      <div class="fc"><h4>Next Steps</h4><a onclick="cp()">📋 Plan Copy Karo</a><a onclick="go('tips')">💡 Tips Padho</a><a onclick="go('planner')">🔄 Naya Plan Banao</a></div>
+      <div class="fc"><h4>Remember</h4><a>✅ Consistency = Results</a><a>✅ 7-8 ghante neend lo</a><a>✅ 3-4 litre paani piyo</a></div>
+    </div>
+    <div class="fbot"><p>© 2026 SKINNY TO FIT</p><p>RESULTS AATE HAIN — RUKNA MAT! 💪</p></div>
+  </footer>
+</div>
+
+<!-- PAGE: BMI GUIDE -->
+<div class="page" id="pg-bmi">
+  <div class="bpw">
+    <div class="ph"><h1>BMI <span style="color:var(--cyan)">GUIDE</span></h1><p>BMI kya hai, kaise calculate hota hai</p></div>
+    <div class="sb rev" style="margin-bottom:18px">
+      <div class="stit" style="font-size:20px;margin-bottom:14px">QUICK BMI CHECK</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div class="ib"><label>HEIGHT</label><div class="ir"><input type="number" id="qh" placeholder="170"><span class="iu">cm</span></div></div>
+        <div class="ib"><label>WEIGHT</label><div class="ir"><input type="number" id="qw" placeholder="65"><span class="iu">kg</span></div></div>
+      </div>
+      <button class="bc2" onclick="qb()">CALCULATE</button>
+      <div class="bigbmi" id="qbr" style="display:none">--</div>
+      <div id="qbc" style="text-align:center;font-family:var(--fm);font-size:12px;letter-spacing:.2em;color:var(--muted);display:none;margin-top:-10px;margin-bottom:10px"></div>
+    </div>
+    <div class="sb rev">
+      <div class="stit" style="font-size:21px;margin-bottom:14px">BMI CATEGORIES</div>
+      <table class="btbl">
+        <tr><th>BMI Range</th><th>Category</th><th>Matlab</th><th>Goal</th></tr>
+        <tr><td style="color:#4499ff">Below 16</td><td>Severely Underweight</td><td>Bahut patla</td><td>Immediate weight gain</td></tr>
+        <tr><td style="color:#0096ff">16 – 18.4</td><td>Underweight</td><td>Patla</td><td>Muscle gain + calorie surplus</td></tr>
+        <tr><td style="color:var(--green)">18.5 – 24.9</td><td>Normal ✓</td><td>Fit hai tu!</td><td>Maintain ya muscle gain</td></tr>
+        <tr><td style="color:#ffc800">25 – 29.9</td><td>Overweight</td><td>Thoda zyada</td><td>Fat loss + cardio</td></tr>
+        <tr><td style="color:var(--orange)">30 – 34.9</td><td>Obese Class I</td><td>Wazn zyada</td><td>Fat loss priority</td></tr>
+        <tr><td style="color:var(--red)">35+</td><td>Obese Class II+</td><td>Health risk</td><td>Doctor + fat loss</td></tr>
+      </table>
+    </div>
+    <div class="sb rev" style="margin-top:16px">
+      <div class="stit" style="font-size:20px;margin-bottom:10px">BMI KI LIMITATIONS</div>
+      <p style="color:var(--muted);font-size:14px;line-height:1.8">BMI sirf ek estimate hai — ye muscle mass aur fat mein fark nahi karta. Ek bodybuilder ka BMI "overweight" show kar sakta hai. BMI ke saath waist size aur body fat percentage bhi dekhna chahiye.</p>
+    </div>
+    <div style="text-align:center;margin-top:28px"><button class="bp" onclick="go('planner')">AI PLAN BANAO →</button></div>
+  </div>
+  <footer>
+    <div class="fi2">
+      <div class="fb"><div class="logo">S<span style="color:var(--orange)">2</span>F</div><p>Free AI fitness planner for Indians.</p></div>
+      <div class="fc"><h4>Pages</h4><a onclick="go('home')">Home</a><a onclick="go('planner')">AI Planner</a><a onclick="go('tips')">Tips</a></div>
+      <div class="fc"><h4>Tools</h4><a onclick="go('bmi')">BMI Calculator</a><a onclick="go('planner')">Diet Planner</a><a onclick="go('planner')">Workout Planner</a></div>
+    </div>
+    <div class="fbot"><p>© 2026 SKINNY TO FIT</p></div>
+  </footer>
+</div>
+
+<!-- PAGE: TIPS -->
+<div class="page" id="pg-tips">
+  <div class="tpw">
+    <div class="ph"><h1>FITNESS <span style="color:var(--green)">TIPS</span></h1><p>Jo cheezein actually kaam karti hain — bina BS ke</p></div>
+    <div class="tg">
+      <div class="tc rev"><div class="tn">01</div><div class="tt">PROTEIN KING HAI</div><div class="tb">Body weight ke per kg 1.6–2g protein lo. Muscle gain ke liye protein sabse zaroori hai. Dal, eggs, paneer, soya, chicken — ye sab achhe sources hain.</div></div>
+      <div class="tc rev"><div class="tn">02</div><div class="tt">NEEND MAT CHODO</div><div class="tb">7-8 ghante neend mein muscles repair hoti hain. Kam neend = slow progress + cortisol badh jata hai = fat gain. Neend bhi workout hai bhai.</div></div>
+      <div class="tc rev"><div class="tn">03</div><div class="tt">PAANI PIYO</div><div class="tb">3-4 litre paani daily. Dehydration se performance 20-30% drop hoti hai. Workout se pehle, during, aur baad mein paani zaroor piyo.</div></div>
+      <div class="tc rev"><div class="tn">04</div><div class="tt">CONSISTENCY &gt; INTENSITY</div><div class="tb">Ek mahine mein chamtkar nahi hota. Jo log 6-12 mahine consistent rehte hain, wahi actually transform hote hain. Choti choti progress celebrate karo.</div></div>
+      <div class="tc rev"><div class="tn">05</div><div class="tt">PROGRESSIVE OVERLOAD</div><div class="tb">Har hafte thoda zyada weight ya reps add karo. Body ko challenge nahi milega to grow nahi karegi. Same weight same reps = zero progress.</div></div>
+      <div class="tc rev"><div class="tn">06</div><div class="tt">JUNK FOOD CONTROL</div><div class="tb">80/20 rule — 80% clean khao, 20% enjoy karo. Complete restriction rebound karvata hai. Occasional cheat meal okay hai.</div></div>
+      <div class="tc rev"><div class="tn">07</div><div class="tt">CARDIO + WEIGHTS DONO</div><div class="tb">Sirf cardio se muscle bhi jaati hai. Sirf weights se heart suffer karta hai. Dono ka balance raho best results ke liye.</div></div>
+      <div class="tc rev"><div class="tn">08</div><div class="tt">STRESS MANAGE KARO</div><div class="tb">Cortisol (stress hormone) fat store karvata hai belly mein. Meditation, walking, ya koi bhi hobby — stress kam karo, results jaldi aayenge.</div></div>
+      <div class="tc rev"><div class="tn">09</div><div class="tt">TRACK KARO PROGRESS</div><div class="tb">Weekly weight + measurements lo. Photos lo. Jo track hota hai woh improve hota hai. Scale pe nahi, mirror mein dekhna zaroori hai.</div></div>
+    </div>
+    <div style="text-align:center;margin-top:44px"><button class="bp" onclick="go('planner')">PLAN BANAO →</button></div>
+  </div>
+  <footer>
+    <div class="fi2">
+      <div class="fb"><div class="logo">S<span style="color:var(--orange)">2</span>F</div><p>Knowledge + Action = Results. 💪</p></div>
+      <div class="fc"><h4>Pages</h4><a onclick="go('home')">Home</a><a onclick="go('planner')">AI Planner</a><a onclick="go('bmi')">BMI Guide</a></div>
+      <div class="fc"><h4>Goals</h4><a onclick="go('planner')">💪 Muscle Gain</a><a onclick="go('planner')">🔥 Fat Loss</a><a onclick="go('planner')">⚖️ Maintain</a></div>
+    </div>
+    <div class="fbot"><p>© 2026 SKINNY TO FIT</p><p>AB UTHKE KAM KAR! 💪</p></div>
+  </footer>
+</div>
+
+<div class="toast" id="tst"></div>
 
 <script>
-/* ─── PRELOADER ─── */
-let pct = 0;
-const pctEl = document.getElementById('prePercent');
-const timer = setInterval(()=>{
-  pct = Math.min(pct + Math.random()*18, 100);
-  pctEl.textContent = Math.floor(pct) + '%';
-  if(pct>=100){ clearInterval(timer); setTimeout(hidePreloader, 300); }
-},120);
+let sGoal='',sGen='Male',sAct='Sedentary',sWorkoutType='gym',dPlan='',wPlan='',aTab='diet';
+let budgetConfirmed=false;
 
-function hidePreloader(){
-  document.getElementById('preloader').classList.add('hide');
-  initScrollAnimation();
+// Loader messages rotation
+const loaderMsgs=[
+  'Bhai wait kar, body banne mein time lagta hai 🏗️',
+  'AI diet chart bana raha hai... 🥗',
+  'Workout schedule set ho raha hai... 💪',
+  'Teri BMI dekh ke plan customize ho raha hai... 📊',
+  'Budget ke hisab se ingredients select ho rahe hain... 💰',
+  'Thoda patience bhai — results teri zindagi badlenge! 🚀',
+  'Almost ready... bas 10 second aur... ⏳',
+];
+let msgIdx=0,msgInterval=null;
+
+function startLoaderMsgs(){
+  msgIdx=0;
+  document.getElementById('loaderMsg').textContent=loaderMsgs[0];
+  msgInterval=setInterval(()=>{
+    msgIdx=(msgIdx+1)%loaderMsgs.length;
+    document.getElementById('loaderMsg').textContent=loaderMsgs[msgIdx];
+  },3000);
+}
+function stopLoaderMsgs(){if(msgInterval)clearInterval(msgInterval);}
+
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('act'));
+  document.getElementById('pg-'+id).classList.add('act');
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('act'));
+  const nb=document.getElementById('nb-'+id);
+  if(nb)nb.classList.add('act');
+  window.scrollTo(0,0);
+  // Show workout bg on results page
+  const wbg=document.getElementById('workoutBg');
+  if(id==='results'){wbg.classList.add('show')}else{wbg.classList.remove('show')}
+  rev();
+}
+function tmn(){document.getElementById('mn').classList.toggle('open')}
+function rev(){
+  const o=new IntersectionObserver((es)=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('vis'),i*80)})},{threshold:.08});
+  document.querySelectorAll('.rev:not(.vis)').forEach(el=>o.observe(el));
+}
+rev();
+
+function cb(){
+  const h=parseFloat(document.getElementById('ht').value);
+  const w=parseFloat(document.getElementById('wt').value);
+  if(!h||!w){toast2('Height aur Weight daalo pehle!');return}
+  const bmi=w/((h/100)**2),b=Math.round(bmi*10)/10;
+  document.getElementById('bv').textContent=b;
+  let cat,tip,col,pct;
+  if(bmi<16){cat='Severely Underweight';tip='Bahut patla hai — high calorie + protein diet zaroor lo.';col='#4499ff';pct=5}
+  else if(bmi<18.5){cat='Underweight';tip='Thoda patla hai — muscle gain goal choose kar.';col='#0096ff';pct=17}
+  else if(bmi<25){cat='✓ Normal (Fit!)';tip='Bahut achha! Normal range mein hai. Muscle gain ya maintain goal le.';col='#39ff14';pct=42}
+  else if(bmi<30){cat='Overweight';tip='Thoda wazn zyada — fat loss + cardio se jaldi results aayenge.';col='#ffc800';pct=65}
+  else if(bmi<35){cat='Obese Class I';tip='Fat loss priority. Clean diet + daily walk se shuru karo.';col='#ff8800';pct=82}
+  else{cat='Obese Class II+';tip='Serious fat loss needed. Doctor se bhi milna consider karo.';col='#ff3366';pct=93}
+  document.getElementById('bv').style.color=col;
+  document.getElementById('bv').style.textShadow=`0 0 30px ${col}40`;
+  document.getElementById('bct').textContent=cat;
+  document.getElementById('btp').textContent=tip;
+  document.getElementById('bd').style.left=`calc(${pct}% - 7px)`;
+  document.getElementById('bd').style.background=col;
+  document.getElementById('bd').style.boxShadow=`0 0 12px ${col}`;
+  const c=document.getElementById('bc');c.style.display='block';
 }
 
-/* ─── SCROLL ANIMATION ─── */
-function initScrollAnimation(){
-  const observer = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-  },{threshold:0.12});
-  document.querySelectorAll('.section-card').forEach(c=>observer.observe(c));
+function qb(){
+  const h=parseFloat(document.getElementById('qh').value);
+  const w=parseFloat(document.getElementById('qw').value);
+  if(!h||!w){toast2('Height aur Weight daalo!');return}
+  const bmi=Math.round((w/((h/100)**2))*10)/10;
+  let cat,col;
+  if(bmi<18.5){cat='Underweight';col='#0096ff'}
+  else if(bmi<25){cat='✓ Normal';col='#39ff14'}
+  else if(bmi<30){cat='Overweight';col='#ffc800'}
+  else{cat='Obese';col='#ff3366'}
+  const el=document.getElementById('qbr');
+  el.textContent=bmi;el.style.color=col;el.style.textShadow=`0 0 40px ${col}40`;el.style.display='block';
+  const ce=document.getElementById('qbc');ce.textContent=cat;ce.style.color=col;ce.style.display='block';
 }
 
-/* ─── BMI CALCULATOR ─── */
-function calcBMI(){
-  const h = parseFloat(document.getElementById('height').value);
-  const w = parseFloat(document.getElementById('weight').value);
-  if(!h||!w||h<100||w<20) return;
+function sr(type,id,val){
+  if(type==='g'){sGen=val;['gm','gf'].forEach(i=>document.getElementById(i).classList.remove('sel'))}
+  else{sAct=val;['as','al','am','av'].forEach(i=>document.getElementById(i).classList.remove('sel'))}
+  document.getElementById(id).classList.add('sel');
+}
+function sg(g){
+  sGoal=g;
+  ['gcm','gcf','gcn'].forEach(i=>document.getElementById(i).classList.remove('sel'));
+  document.getElementById('gc'+g[0]).classList.add('sel');
+  setTimeout(()=>document.getElementById('bud-section').scrollIntoView({behavior:'smooth',block:'center'}),300);
+}
+function swt(type){
+  sWorkoutType=type;
+  ['wt-gym','wt-home'].forEach(id=>document.getElementById(id).classList.remove('sel'));
+  document.getElementById('wt-'+type).classList.add('sel');
+}
+function sb2(v){
+  document.getElementById('bud').value=v;
+  budgetConfirmed=false;
+  ub();
+}
+function ub(){
+  const b=parseFloat(document.getElementById('bud').value);
+  budgetConfirmed=false;
+  const el=document.getElementById('bhi');
+  if(!b){el.textContent='—';el.style.color='var(--muted)';return}
+  if(b<1000){el.textContent='🚨 Itna kam? Yaar seriously soch...';el.style.color='var(--red)'}
+  else if(b<1500){el.textContent='⚠️ Bahut tight — par kuch na kuch karenge';el.style.color='var(--red)'}
+  else if(b<3000){el.textContent='👍 Theek hai — decent Indian diet possible';el.style.color='#ffc800'}
+  else if(b<6000){el.textContent='✅ Achha budget — good balanced diet ho sakti hai';el.style.color='var(--green)'}
+  else{el.textContent='🔥 Premium budget — best nutrition + supplements bhi';el.style.color='var(--cyan)'}
+}
 
-  const bmi = (w/((h/100)**2)).toFixed(1);
-  const display = document.getElementById('bmiDisplay');
-  display.classList.add('show');
-  document.getElementById('bmiVal').textContent = bmi;
+// Low budget popup logic
+function openPopup(budgetVal){
+  document.getElementById('popupBudgetShow').textContent='₹'+Math.round(budgetVal).toLocaleString('en-IN');
+  document.getElementById('budgetPopup').classList.add('open');
+}
+function closePopup(){document.getElementById('budgetPopup').classList.remove('open')}
+function increaseBudget(){
+  document.getElementById('bud').value=1500;
+  budgetConfirmed=true;
+  ub();
+  document.getElementById('bhi').textContent='⚠️ Bahut tight — par kuch na kuch karenge';
+  document.getElementById('bhi').style.color='var(--red)';
+  closePopup();
+  toast2('Budget ₹1,500 set ho gaya!');
+}
+function proceedAnyway(){
+  budgetConfirmed=true;
+  closePopup();
+  doGenerate();
+}
 
-  let cat, color, sugg, pct;
-  if(bmi<16){
-    cat='Severe Underweight 😰'; color='#4af'; pct=5;
-    sugg='Bhai tujhe urgent help chahiye! Tu bahut hi zyada patla hai. Doctor se mil aur khub khana kha.';
-  } else if(bmi<18.5){
-    cat='Underweight 😅'; color='#4af'; pct=18;
-    sugg='Tu thoda patla hai bhai. Muscle gain goal choose kar aur proper diet follow kar. Body banegi!';
-  } else if(bmi<25){
-    cat='Normal Weight ✅'; color='#00ff88'; pct=50;
-    sugg='Teri BMI perfect hai bhai! Ab goal ke hisab se body ko next level le ja.';
-  } else if(bmi<30){
-    cat='Overweight ⚠️'; color='#ffaa00'; pct=72;
-    sugg='Thoda extra fat hai bhai. Fat loss goal choose kar. Diet + workout se 2-3 mahine mein results dikhenge!';
-  } else {
-    cat='Obese 🚨'; color='#ff4500'; pct=90;
-    sugg='Bhai serious ho ja! Obesity health ke liye dangerous hai. Aaj se hi shuru kar — diet + exercise must hai.';
+async function gen(){
+  const age=document.getElementById('age').value;
+  const h=document.getElementById('ht').value;
+  const w=document.getElementById('wt').value;
+  const bud=document.getElementById('bud').value;
+  const det=document.getElementById('gd').value;
+  const bv=document.getElementById('bv').textContent;
+  if(!age||!h||!w){toast2('⚠️ Pehle apni details fill karo (Step 01)!');return}
+  if(!sGoal){toast2('⚠️ Goal choose karo (Step 02)!');return}
+  if(!bud){toast2('⚠️ Budget daalo (Step 04)!');return}
+
+  // Low budget check
+  if(parseFloat(bud)<1000&&!budgetConfirmed){
+    openPopup(parseFloat(bud));
+    return;
   }
-
-  document.getElementById('bmiCat').textContent = cat;
-  document.getElementById('bmiCat').style.color = color;
-  document.getElementById('bmiSugg').textContent = sugg;
-  const bar = document.getElementById('bmiBar');
-  setTimeout(()=>{ bar.style.width = pct+'%'; bar.style.background = color; }, 100);
+  budgetConfirmed=false;
+  doGenerate();
 }
 
-['height','weight'].forEach(id=>{
-  document.getElementById(id).addEventListener('input', calcBMI);
+async function doGenerate(){
+  const age=document.getElementById('age').value;
+  const h=document.getElementById('ht').value;
+  const w=document.getElementById('wt').value;
+  const bud=document.getElementById('bud').value;
+  const det=document.getElementById('gd').value;
+  const bv=document.getElementById('bv').textContent;
+  const btn=document.getElementById('gbtn');
+  btn.disabled=true;
+  document.getElementById('gtxt').textContent='BAN RAHA HAI...';
+  go('results');
+  document.getElementById('ldr').style.display='flex';
+  document.getElementById('rmain').style.display='none';
+  document.getElementById('usum').style.display='none';
+  startLoaderMsgs();
+
+  const gl=sGoal==='muscle'?'Muscle Gain 💪':sGoal==='fatloss'?'Fat Loss 🔥':'Maintain ⚖️';
+  const wtLabel=sWorkoutType==='gym'?'Gym (full equipment available)':'Home (bodyweight + minimal equipment)';
+  const info=`User details:\n- Umar: ${age} saal | Gender: ${sGen}\n- Height: ${h}cm | Weight: ${w}kg | BMI: ${bv}\n- Activity: ${sAct}\n- Goal: ${gl}\n- Specific goal: ${det||'koi specific goal nahi'}\n- Monthly food budget: ₹${bud}\n- Workout preference: ${wtLabel}`;
+
+  const dq=`Tu ek professional Indian fitness nutritionist hai. Is user ke liye 7-din ka detailed DAILY diet plan bana. Ye plan DAILY follow karna hai — same diet roz.\n\n${info}\n\nINSTRUCTIONS:\n- Sirf affordable Indian khana: roti, dal, sabzi, chawal, dahi, eggs, paneer, soya chunks, moong, oats, banana, mungfali, sprouts etc.\n- Budget ₹${bud}/month mein sab fit karo\n- Ek standard daily diet plan bana (jo har roz follow hoga)\n- 5 meals: Breakfast, Mid-Morning Snack, Lunch, Evening Snack, Dinner\n- Har meal mein calories aur protein likho\n- Din ke end mein Total Calories aur Total Protein\n- Goal "${gl}" ke hisab se customize karo\n- 5 important diet tips bhi do\n- Casual Hindi-English mix mein, emojis use karo, motivating tone\n- Sab clearly readable format mein likho`;
+
+  const wq=`Tu ek experienced Indian fitness trainer hai. Is user ke liye full WEEK ka detailed workout plan bana.\n\n${info}\n\nINSTRUCTIONS:\n- IMPORTANT: Workout type "${wtLabel}" ke liye plan bana\n- Agar GYM hai: barbells, dumbbells, cables, machines use karo\n- Agar HOME hai: bodyweight exercises, resistance bands, push-ups, pull-ups, home alternatives use karo\n- Goal "${gl}" ke hisab se customize karo\n- 5 workout days + 2 active rest days (full week cover karo)\n- Har workout day: focus area, 5-min warm-up, main workout (exercise, sets x reps, rest time), 5-min cool-down\n- Beginner friendly explanations\n- Week ke end mein recovery + sleep tips\n- Casual Hindi-English mix mein, emojis use karo, motivating tone\n- Sab clearly readable format mein likho`;
+
+  const API_HEADERS={'Content-Type':'application/json','x-api-key':'','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
+  try{
+    const [r1,r2]=await Promise.all([
+      fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:API_HEADERS,body:JSON.stringify({model:'claude-sonnet-4-5-20251001',max_tokens:2000,messages:[{role:'user',content:dq}]})}),
+      fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:API_HEADERS,body:JSON.stringify({model:'claude-sonnet-4-5-20251001',max_tokens:2000,messages:[{role:'user',content:wq}]})})
+    ]);
+    const [d1,d2]=await Promise.all([r1.json(),r2.json()]);
+    if(d1.error){throw new Error('Diet API: '+d1.error.message)}
+    if(d2.error){throw new Error('Workout API: '+d2.error.message)}
+    dPlan=d1.content?.map(b=>b.text||'').join('')||'❌ Diet plan load nahi hua. Dobara try karo.';
+    wPlan=d2.content?.map(b=>b.text||'').join('')||'❌ Workout plan load nahi hua. Dobara try karo.';
+    const gl2=sGoal==='muscle'?'Muscle Gain 💪':sGoal==='fatloss'?'Fat Loss 🔥':'Maintain ⚖️';
+    document.getElementById('usum').innerHTML=`<div><span class="ul">Umar</span><span class="uv">${age} Saal</span></div><div><span class="ul">BMI</span><span class="uv">${bv}</span></div><div><span class="ul">Goal</span><span class="uv">${gl2}</span></div><div><span class="ul">Budget</span><span class="uv">₹${parseInt(bud).toLocaleString('en-IN')}</span></div><div><span class="ul">Activity</span><span class="uv" style="font-size:14px">${sAct}</span></div><div><span class="ul">Workout</span><span class="uv" style="font-size:14px">${sWorkoutType==='gym'?'🏋️ Gym':'🏠 Home'}</span></div>`;
+    document.getElementById('usum').style.display='flex';
+    stopLoaderMsgs();
+    document.getElementById('ldr').style.display='none';
+    document.getElementById('rmain').style.display='block';
+    document.getElementById('rtxt').textContent=dPlan;
+    aTab='diet';
+    document.getElementById('rtd').classList.add('act');
+    document.getElementById('rtw').classList.remove('act');
+  }catch(err){
+    stopLoaderMsgs();
+    document.getElementById('ldr').style.display='none';
+    document.getElementById('rmain').style.display='block';
+    document.getElementById('rtxt').textContent=`❌ Error aaya bhai!\n\nError: ${err.message}\n\n✅ FIX karo:\n• Agar "Failed to fetch" aaya — internet check karo\n• Agar "401" aaya — API key check karo\n• Agar "403" aaya — CORS issue hai, GitHub Pages pe deploy karo\n• Agar "429" aaya — thoda ruk ja, rate limit hit hua hai\n\n🚀 Best option: GitHub Pages pe deploy karo (free):\n1. github.com pe repo bana\n2. index.html upload karo\n3. Settings → Pages → main → Save\n4. URL pe kholo — 100% kaam karega!`;
+  }
+  btn.disabled=false;
+  document.getElementById('gtxt').textContent='MERA PLAN GENERATE KARO';
+}
+
+function stab(t){
+  aTab=t;
+  document.getElementById('rtd').classList.toggle('act',t==='diet');
+  document.getElementById('rtw').classList.toggle('act',t==='workout');
+  const el=document.getElementById('rtxt');
+  el.style.opacity='0';el.style.transform='translateY(8px)';el.style.transition='all .25s ease';
+  setTimeout(()=>{el.textContent=t==='diet'?dPlan:wPlan;el.style.opacity='1';el.style.transform='none'},200);
+}
+function cp(){
+  const txt=aTab==='diet'?dPlan:wPlan;
+  if(!txt||txt.startsWith('❌')){toast2('Pehle plan generate karo!');return}
+  navigator.clipboard.writeText(txt).then(()=>toast2('✅ Plan copy ho gaya! Kahin bhi paste karo.')).catch(()=>toast2('Manually select karke copy karo.'));
+}
+function toast2(msg){
+  const t=document.getElementById('tst');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// Close popup on overlay click
+document.getElementById('budgetPopup').addEventListener('click',function(e){
+  if(e.target===this)closePopup();
 });
 
-/* ─── GOAL ─── */
-let selectedGoal = '';
-function selectGoal(el, goal){
-  document.querySelectorAll('.goal-pill').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  selectedGoal = goal;
-}
-
-/* ─── BUDGET ─── */
-let selectedBudget = '';
-let selectedBudgetLabel = '';
-function selectBudget(el, val, label){
-  document.querySelectorAll('.budget-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  selectedBudget = val;
-  selectedBudgetLabel = label;
-  document.getElementById('customWrap').classList.remove('show');
-}
-function openCustomBudget(el){
-  document.querySelectorAll('.budget-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('customWrap').classList.add('show');
-  selectedBudget = 'custom';
-}
-function checkCustomBudget(){
-  const val = parseFloat(document.getElementById('customBudget').value);
-  if(val && val < 1000){ showPopup(); document.getElementById('customBudget').value=''; }
-  else if(val){ selectedBudget = val+'-custom'; selectedBudgetLabel = '₹'+val; }
-}
-
-/* ─── POPUP ─── */
-function showPopup(){ document.getElementById('budgetPopup').classList.add('show'); }
-function closePopup(){ document.getElementById('budgetPopup').classList.remove('show'); }
-
-/* ─── TABS ─── */
-function switchTab(btn, tabId){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(tabId).classList.add('active');
-}
-
-/* ─── GENERATE ─── */
-async function generatePlan(){
-  const age = document.getElementById('age').value;
-  const gender = document.getElementById('gender').value;
-  const height = document.getElementById('height').value;
-  const weight = document.getElementById('weight').value;
-  const activity = document.getElementById('activity').value;
-  const goal = selectedGoal;
-  const budget = selectedBudget;
-
-  if(!age||!gender||!height||!weight||!activity){
-    alert('Bhai pehle apni saari details fill kar! 😅'); return;
-  }
-  if(!goal){ alert('Apna goal select kar pehle! 💪'); return; }
-  if(!budget){ alert('Budget select karna padega bhai! 💰'); return; }
-
-  if(budget==='custom'){
-    const cv = parseFloat(document.getElementById('customBudget').value);
-    if(!cv||cv<1000){ showPopup(); return; }
-  }
-
-  const bmi = (parseFloat(weight)/((parseFloat(height)/100)**2)).toFixed(1);
-  const goalMap = {muscle_gain:'Muscle Gain',fat_loss:'Fat Loss',maintain:'Maintain',body_recomp:'Body Recomposition'};
-  const actMap = {sedentary:'Sedentary',light:'Lightly Active',moderate:'Moderately Active',active:'Very Active',veryactive:'Extremely Active (Athlete)'};
-
-  const budgetLabel = budget==='custom' ? '₹'+document.getElementById('customBudget').value : selectedBudgetLabel;
-
-  document.getElementById('loadingOverlay').classList.add('show');
-
-  const dietPrompt = `You are an expert Indian fitness nutritionist. Create a detailed diet plan in Hindi-English mix (Hinglish) for:
-- Age: ${age} years, Gender: ${gender}
-- Height: ${height}cm, Weight: ${weight}kg, BMI: ${bmi}
-- Activity Level: ${actMap[activity]}
-- Goal: ${goalMap[goal]}
-- Monthly food budget: ${budgetLabel}
-
-Format your response with HTML tags. Use:
-<h2> for main sections
-<h3> for sub-sections
-<strong> for important values (calories, macros)
-<em> for food items
-<ul><li> for lists
-
-Include:
-1. Daily Calorie Target with calculation
-2. Macros breakdown (Protein/Carbs/Fat in grams)
-3. Full Day Meal Plan - Breakfast, Mid-morning snack, Lunch, Evening snack, Dinner, Post-workout (with exact quantities and timing)
-4. Best Indian foods for this budget and goal
-5. Weekly grocery list with approximate costs in Indian Rupees
-6. Foods to AVOID
-
-Keep it practical and budget-friendly for India. Be specific with Indian foods like dal, roti, rice, paneer, eggs, chicken etc.`;
-
-  const workoutPrompt = `You are an expert fitness trainer. Create a detailed weekly workout plan in Hinglish for:
-- Age: ${age} years, Gender: ${gender}
-- BMI: ${bmi}, Activity Level: ${actMap[activity]}
-- Goal: ${goalMap[goal]}
-
-Format with HTML: <h2> for sections, <h3> for days, <strong> for sets/reps, <em> for exercise names, <ul><li> for lists.
-
-Include:
-1. Weekly Training Split (which body parts on which days)
-2. Full 7-day workout schedule:
-   - Exercise name, Sets x Reps, Rest time, Tips
-3. Warm-up routine (5-10 min)
-4. Cool-down stretches
-5. Progressive overload tips
-6. Home workout alternatives if no gym
-7. Recovery & sleep tips
-
-Be specific and motivating!`;
-
-  const tipsPrompt = `Give practical fitness and lifestyle tips in Hinglish for a ${age} year old ${gender} with BMI ${bmi} and goal of ${goalMap[goal]} on a budget of ${budgetLabel}/month.
-
-Format with HTML. Include:
-<h2> for sections, <strong> for key points, <ul><li> for tips.
-
-Cover:
-1. Top 5 Supplements (budget-friendly, Indian market) with approximate prices
-2. Best timing for workouts
-3. Sleep and recovery importance
-4. Motivation tips to stay consistent
-5. Common mistakes to avoid
-6. Hydration guide
-7. Realistic timeline: When to expect results
-
-Be real, direct and motivating like a desi fitness coach!`;
-
-  try {
-    const [dietRes, workoutRes, tipsRes] = await Promise.all([
-      callClaude(dietPrompt),
-      callClaude(workoutPrompt),
-      callClaude(tipsPrompt)
-    ]);
-
-    document.getElementById('dietContent').innerHTML = dietRes;
-    document.getElementById('workoutContent').innerHTML = workoutRes;
-    document.getElementById('tipsContent').innerHTML = tipsRes;
-
-    document.getElementById('loadingOverlay').classList.remove('show');
-    const result = document.getElementById('result-section');
-    result.classList.add('show');
-    setTimeout(()=>result.scrollIntoView({behavior:'smooth', block:'start'}), 100);
-
-  } catch(e) {
-    document.getElementById('loadingOverlay').classList.remove('show');
-    alert('Error aa gaya bhai! Dobara try kar. 😅\n'+e.message);
-  }
-}
-
-async function callClaude(prompt){
-  const res = await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1000,
-      messages:[{role:'user',content:prompt}]
-    })
-  });
-  if(!res.ok) throw new Error('API error: '+res.status);
-  const data = await res.json();
-  return data.content.map(b=>b.text||'').join('');
-}
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')gen()});
 </script>
 </body>
 </html>
